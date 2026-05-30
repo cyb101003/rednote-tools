@@ -22,30 +22,7 @@ It reduces AI detection scores and mimics genuine user-generated content, helpin
 
 ## 🧠 How it works
 
-```mermaid
-flowchart TD
-    A[User Input: Topic + Platform] --> B[Retrieve Viral References]
-    B --> C1[Real-time Xiaohongshu Scraping]
-    B --> C2[Local Vector DB Search]
-    C1 --> D[Style Context]
-    C2 --> D
-    
-    D --> E1[Agent A: Viral Curator]
-    D --> E2[Agent B: Real-Life Sharer]
-    D --> E3[Agent C: Rational Author]
-    
-    E1 --> F[Three Variants Generated]
-    E2 --> F
-    E3 --> F
-    
-    F --> G[Judge Agent Scores & Picks Best]
-    G --> H[LLM Humanization]
-    H --> I[Rule-Based Perturbations]
-    I --> J[Final Human-Like Copy Output]
-    
-    style A fill:#667eea,color:#fff
-    style J fill:#f5576c,color:#fff
-    style G fill:#764ba2,color:#fff
+
 User provides a topic and target platform.
 
 The system retrieves similar viral posts from the vector DB (and live Xiaohongshu if applicable).
