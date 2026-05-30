@@ -101,7 +101,12 @@ Open a new terminal:
 streamlit run app.py
 ```
 
-Then visit http://localhost:8501.
+## 🌐 Live Demo
+
+Visit the live demo at **[https://realskill.asia](https://realskill.asia)** to try RealSkill directly in your browser.
+
+API endpoint: `https://realskill.asia/generate`  
+Skill discovery: `https://realskill.asia/.well-known/skill.json`
 
 🔌 API Usage
 
