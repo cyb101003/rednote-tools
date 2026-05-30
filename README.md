@@ -18,7 +18,7 @@ It reduces AI detection scores and mimics genuine user-generated content, helpin
 - **Standard Skill Interface**  
   Exposes `POST /generate` and `GET /.well-known/skill.json`, making it directly callable by any agent supporting OpenAI function calling.
 - **Beautiful Streamlit Demo**  
-  Includes a modern UI for quick testing and visualisation.
+  Includes a modern web UI for quick testing and visualisation.
 
 ## 🧠 How it works
 
@@ -29,12 +29,47 @@ It reduces AI detection scores and mimics genuine user-generated content, helpin
 5. The winning copy is polished with LLM humanization and rule-based perturbations.
 6. The final text is returned along with scores and the raw outputs of all agents.
 
-## 🗂 Project Structure
+## 🌐 Live Demo
 
+RealSkill is deployed and accessible online:
+
+👉 **[https://realskill.asia](https://realskill.asia)**
+
+You can generate copy directly in your browser — no installation needed.
+
+API endpoint: `https://realskill.asia/generate`  
+Skill discovery: `https://realskill.asia/.well-known/skill.json`  
+Swagger docs: `https://realskill.asia/docs`
+
+## 📦 Use as an Agent Skill (ZIP)
+
+RealSkill can also run locally inside any agent that supports Python functions.  
+No server, no API calls — just drop the ZIP into your agent's skill folder.
+
+1. Download `RealSkill_agent.zip` from the [Releases](https://github.com/cyb101003/rednote-tools/releases) page (or generate it with `python build_skill_zip.py`).
+2. Extract the ZIP into your agent's `skills/` directory.
+3. Install dependencies:
+   ```bash
+   pip install -r requirements_skill.txt
+   playwright install chromium
+Create a .env file with your DeepSeek API key:
+
+text
+OPENAI_API_KEY=sk-your-key
+OPENAI_BASE_URL=https://api.deepseek.com/v1
+Build the vector index:
+
+bash
+python build_index.py
+Your agent can now call from skill_entry import generate and use the Skill locally.
+
+🗂 Project Structure
+text
 rednote-tools/
 ├── main.py                # FastAPI server & Skill endpoints
 ├── app.py                 # Streamlit demo UI
 ├── skill_manifest.py      # Skill definition (OpenAI function format)
+├── build_skill_zip.py     # Script to create the Agent Skill ZIP
 ├── build_index.py         # ChromaDB vector index builder
 ├── core/                  # Core logic
 │   ├── generator.py       # RAG + multi-agent generation
@@ -49,94 +84,57 @@ rednote-tools/
 ├── requirements.txt
 ├── Dockerfile
 └── .env.example
-
-## 🚀 Quick Start
-
-### 1. Clone & set up environment
-
-```bash
+🚀 Quick Start (Local)
+1. Clone & set up environment
+bash
 git clone https://github.com/cyb101003/rednote-tools.git
 cd rednote-tools
 python -m venv venv
 source venv/bin/activate   # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 playwright install chromium
-```
-
 2. Configure API keys
-
 Create .env from the example:
 
-```bash
+bash
 cp .env.example .env
-```
-
 Edit .env with your DeepSeek credentials:
 
-```
+text
 OPENAI_API_KEY=sk-your-deepseek-key
 OPENAI_BASE_URL=https://api.deepseek.com/v1
-```
-
 3. Build the vector index
-
-```bash
+bash
 python build_index.py
-```
-
 4. Start the backend
-
-```bash
+bash
 uvicorn main:app --reload
-```
-
 The API is now running at http://localhost:8000.
 Swagger UI: http://localhost:8000/docs
 
 5. (Optional) Launch the demo UI
-
 Open a new terminal:
 
-```bash
+bash
 streamlit run app.py
-```
-
-## 🌐 Live Demo
-
-Visit the live demo at **[https://realskill.asia](https://realskill.asia)** to try RealSkill directly in your browser.
-
-API endpoint: `https://realskill.asia/generate`  
-Skill discovery: `https://realskill.asia/.well-known/skill.json`
+Then visit http://localhost:8501.
 
 🔌 API Usage
-
 Generate copy
-
-```bash
+bash
 curl -X POST http://localhost:8000/generate \
   -H "Content-Type: application/json" \
   -d '{"topic":"weekend trip ideas","platform":"xiaohongshu"}'
-```
-
 Response includes the final text, winner agent, scores, and all variants.
 
 Skill discovery (for AI agents)
-
-```bash
+bash
 curl http://localhost:8000/.well-known/skill.json
-```
-
 🐳 Docker Deployment
-
-```bash
+bash
 docker build -t realskill .
 docker run -d -p 8000:8000 -e OPENAI_API_KEY=your_key -e OPENAI_BASE_URL=... realskill
-```
-
 📄 License
-
 MIT – feel free to use, extend, or integrate into your own agents.
 
----
-
-Built for the UCWS Hackathon
+Built for the UCWS Hackathon — Skill Track.
