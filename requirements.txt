@@ -1,0 +1,11 @@
+fastapi>=0.100.0
+uvicorn[standard]
+openai>=1.0.0
+chromadb>=0.4.0
+python-dotenv
+pydantic
+httpx
+playwright
+beautifulsoup4
+lxml
+streamlit
