@@ -1,1 +1,402 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>RealSkill - AI Human-like Copywriting, Zero Detection</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#241a00",
+                        "on-primary-container": "#e0d2ff",
+                        "on-primary-fixed-variant": "#4f378a",
+                        "primary-fixed-dim": "#cfbcff",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#22005d",
+                        "surface-container-highest": "#e6e0e9",
+                        "inverse-on-surface": "#f5eff7",
+                        "on-surface": "#1d1b20",
+                        "inverse-surface": "#322f35",
+                        "primary-fixed": "#e9ddff",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#ded8e0",
+                        "error": "#ba1a1a",
+                        "surface-container": "#f2ecf4",
+                        "surface-tint": "#6750a4",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#fdf7ff",
+                        "primary-container": "#6750a4",
+                        "on-secondary-container": "#645a7d",
+                        "primary": "#4f378a",
+                        "outline": "#7a7582",
+                        "surface-container-low": "#f8f2fa",
+                        "inverse-primary": "#cfbcff",
+                        "surface-variant": "#e6e0e9",
+                        "on-surface-variant": "#494551",
+                        "on-secondary-fixed-variant": "#4b4263",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#765b00",
+                        "tertiary-container": "#c9a74d",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#63597c",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#1f1635",
+                        "surface-bright": "#fdf7ff",
+                        "secondary-container": "#e1d4fd",
+                        "secondary-fixed": "#e9ddff",
+                        "tertiary-fixed": "#ffdf93",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "surface": "#fdf7ff",
+                        "secondary-fixed-dim": "#cdc0e9",
+                        "on-tertiary-container": "#503d00",
+                        "surface-container-high": "#ece6ee",
+                        "tertiary-fixed-dim": "#e7c365",
+                        "on-background": "#1d1b20",
+                        "outline-variant": "#cbc4d2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "xs": "0.25rem",
+                        "sm": "0.5rem",
+                        "base": "8px",
+                        "md": "1rem",
+                        "lg": "1.5rem",
+                        "container-max": "1280px",
+                        "xl": "2.5rem"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-md": ["30px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "display-lg-mobile": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ai-glow {
+            box-shadow: 0 0 20px 0 rgba(79, 55, 138, 0.15);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) translateX(0px); }
+            50% { transform: translateY(-20px) translateX(10px); }
+            100% { transform: translateY(0px) translateX(0px); }
+        }
+        .floating-element {
+            animation: float 8s ease-in-out infinite;
+        }
+        .breath {
+            animation: breath-pulse 3s ease-in-out infinite;
+        }
+        @keyframes breath-pulse {
+            0%, 100% { box-shadow: 0 0 0px 0px rgba(79, 55, 138, 0); }
+            50% { box-shadow: 0 0 25px 5px rgba(79, 55, 138, 0.25); }
+        }
 
+        .mesh-gradient {
+            background-color: #fdf7ff;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(260, 43%, 38%, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(262, 40%, 45%, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(260, 43%, 38%, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, hsla(262, 40%, 45%, 0.05) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(260, 43%, 38%, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(262, 40%, 45%, 0.1) 0px, transparent 50%);
+            background-size: 200% 200%;
+            animation: mesh-move 20s ease infinite;
+        }
+        @keyframes mesh-move {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .char-reveal {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: char-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes char-in {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-premium-hover {
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .card-premium-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(79, 55, 138, 0.12);
+            border-color: rgba(79, 55, 138, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-primary-fixed-dim">
+    <!-- Header / TopAppBar -->
+    <header class="bg-white/80 dark:bg-surface/80 backdrop-blur-xl border-b border-white/20 shadow-sm sticky top-0 z-50 transition-all duration-300 py-2">
+        <div class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto whitespace-nowrap flex-nowrap">
+            <div class="flex items-center gap-2">
+                <img alt="RealSkill Logo" class="h-8 md:h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCY06T78qdD8LoadDzL-ZjOuDXiCeQHnNnD8a-h0JMgmwD-X_UatGZ7O6PBVvjr95nFlqrpCTbGybVUaN8RJTd5BeIgugy3dVZ5UYsP-s18OSfigbqT0JlxQpLuhV8MUgh2KH6mV-9f0rZmRmdIojyEu7cIqJx-bpM3CiXBK-No0M-NVCJCxvJWpN7g7ZnevQbi9aguPgHE7dtXeuZ7pr30NvyQGc5slyVKiR6RevPCVzF0Ep-5NcIUqliAIidBRsqj36ahfdsFZ1pG"/>
+                <div class="hidden sm:block font-headline-sm text-headline-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                    RealSkill
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center space-x-8 whitespace-nowrap shrink-0">
+                <a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-md" href="#features">Features</a>
+            </nav>
+            <div class="flex items-center gap-4 flex-nowrap shrink-0">
+                <!-- 顶部按钮：改成了链接到 /app -->
+                <a href="/app" class="bg-primary text-on-primary px-6 py-2 rounded-full font-label-md transition-all active:scale-95 hover:opacity-90 ai-glow shrink-0 inline-block text-center">Try Now</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative min-h-[921px] flex items-center justify-center overflow-hidden px-gutter pt-20 mesh-gradient">
+            <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-fixed-dim rounded-full blur-[120px] opacity-20 floating-element" style="animation-delay: 0s;"></div>
+                <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary-container rounded-full blur-[100px] opacity-30 floating-element" style="animation-delay: -2s;"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-surface-container rounded-full blur-[150px] opacity-40"></div>
+            </div>
+            <div class="relative z-10 text-center max-w-4xl mx-auto">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 backdrop-blur-md border border-white/60 shadow-sm mb-8 animate-fade-in reveal active">
+                    <img alt="Icon" class="w-5 h-5 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCY06T78qdD8LoadDzL-ZjOuDXiCeQHnNnD8a-h0JMgmwD-X_UatGZ7O6PBVvjr95nFlqrpCTbGybVUaN8RJTd5BeIgugy3dVZ5UYsP-s18OSfigbqT0JlxQpLuhV8MUgh2KH6mV-9f0rZmRmdIojyEu7cIqJx-bpM3CiXBK-No0M-NVCJCxvJWpN7g7ZnevQbi9aguPgHE7dtXeuZ7pr30NvyQGc5slyVKiR6RevPCVzF0Ep-5NcIUqliAIidBRsqj36ahfdsFZ1pG"/>
+                    <span class="text-primary font-label-md">Next-Gen AI Text Engine</span>
+                </div>
+                <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-6 leading-tight" id="hero-title">
+                    <span class="block text-on-surface" id="title-line-1">Release&nbsp;&nbsp;the&nbsp;&nbsp;Temperature&nbsp;&nbsp;of&nbsp;&nbsp;Text</span>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-primary-container inline-block reveal active" style="transition-delay: 0.8s;">RealSkill</span>
+                </h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant mb-12 max-w-2xl mx-auto reveal active" style="transition-delay: 1s;">AI generates human-like copy, zero detection across all platforms. Break the boundaries of machine feel, letting every line of text spark with human inspiration.</p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-6 reveal active" style="transition-delay: 1.2s;">
+                    <!-- Try Now 按钮：链接到 /app -->
+                    <a class="breath bg-primary text-on-primary px-10 py-4 rounded-full font-headline-sm flex items-center gap-2 group transition-all hover:scale-105 active:scale-95" href="/app">
+                        <span>Try Now</span>
+                        <span class="material-symbols-outlined transition-transform group-hover:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+                    </a>
+                    <!-- Watch Demo 按钮：改为链接到 YouTube -->
+                    <a href="https://youtu.be/ulPVZCE00QU?si=n4HMVxLYQu3DF0-Z" target="_blank" class="px-10 py-4 rounded-full font-headline-sm text-primary border-2 border-primary/20 hover:border-primary/40 hover:bg-white/40 backdrop-blur-sm transition-all flex items-center gap-2 group">
+                        <span class="material-symbols-outlined transition-transform group-hover:scale-110" data-icon="play_circle">play_circle</span>
+                        <span>Watch Demo</span>
+                    </a>
+                </div>
+                <!-- Dashboard Mockup -->
+                <div class="mt-20 glass-card rounded-[2rem] p-4 ai-glow max-w-5xl mx-auto border border-white/50 reveal active" style="transition-delay: 1.4s;">
+                    <div class="bg-surface-container-lowest rounded-[1.5rem] overflow-hidden shadow-sm">
+                        <img alt="AI Dashboard Preview" class="w-full h-auto object-cover aspect-video" src="/static/preview.jpg"/>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section - 添加了 id="features" -->
+        <section id="features" class="py-xl px-gutter max-w-container-max mx-auto relative overflow-hidden">
+            <div class="text-center mb-20 reveal active">
+                <h2 class="font-headline-md text-headline-md text-on-surface mb-4">Redefining AI Creation</h2>
+                <div class="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="group bg-white p-10 rounded-[2rem] border border-outline-variant/20 transition-all duration-500 card-premium-hover reveal active" style="transition-delay: 0.1s;">
+                    <div class="w-16 h-16 rounded-2xl bg-primary-container/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-primary text-[32px]" data-icon="groups">groups</span>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-on-surface mb-4">Multi-Agent Engine</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">Three AI personas compete online based on different personality traits to output the most human-like copy.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="group bg-white p-10 rounded-[2rem] border border-outline-variant/20 transition-all duration-500 card-premium-hover reveal active" style="transition-delay: 0.2s;">
+                    <div class="w-16 h-16 rounded-2xl bg-secondary-container/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-secondary text-[32px]" data-icon="visibility_off">visibility_off</span>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-on-surface mb-4">Undetectable</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">Built-in deep humanization technology dynamically adjusts sentence structures and word weights to remove AI traces from the core.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="group bg-white p-10 rounded-[2rem] border border-outline-variant/20 transition-all duration-500 card-premium-hover reveal active" style="transition-delay: 0.3s;">
+                    <div class="w-16 h-16 rounded-2xl bg-tertiary-container/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-tertiary text-[32px]" data-icon="hub">hub</span>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-on-surface mb-4">Multi-Platform Support</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">Deep insights into Xiaohongshu viral templates and Zhihu/Weibo professional tones, customizing generation logic for different platforms.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bento Layout Highlight -->
+        <section class="py-xl px-gutter max-w-container-max mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
+                <div class="md:col-span-8 bg-surface-container-low rounded-[2.5rem] overflow-hidden relative group reveal active">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent z-0"></div>
+                    <div class="relative z-10 p-12 h-full flex flex-col justify-between">
+                        <div>
+                            <span class="inline-block px-4 py-1 rounded-full bg-primary text-on-primary font-label-sm mb-6">Core Technology</span>
+                            <h2 class="font-display-lg-mobile md:font-display-lg text-on-surface mb-6">Beyond Commands, Reach Emotion</h2>
+                            <p class="font-body-lg text-on-surface-variant max-w-md">Our algorithm doesn't just execute orders; it understands the ebb and flow of emotions and the tension of narrative.</p>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="material-symbols-outlined text-primary text-4xl" data-icon="auto_awesome">auto_awesome</span>
+                            <span class="material-symbols-outlined text-secondary text-4xl" data-icon="neurology">neurology</span>
+                        </div>
+                    </div>
+                    <img alt="Abstract AI visualization" class="absolute right-[-10%] bottom-[-10%] w-2/3 h-auto object-contain opacity-50 transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKJVVV72rfTckQ1xxEoTuk9Mf3Hfixoq66DaUvehr_8bU3KuC6bz6f3GrsC9sZ6zXYu7DMeUNO-KBc5Uk7qZH3wawO1MWLBLrhe2TOl2aeb7TOHwRYFoxanrIigxKhuFdfnO_QbGaIEVW60-kntjufVvQgL7wfGJ7I6ic6_gCx4LZwx_onDKYQ-tYclmBE_F_lIlRg4PFR4I7TZpD9oA05ceV7NW3T-0_rlMOc1X2kdpTg-T2D0wS0tRmgG5SXvr0yeENSmSO1ed9O"/>
+                </div>
+                <div class="md:col-span-4 bg-primary rounded-[2.5rem] p-12 text-on-primary flex flex-col justify-center items-center text-center reveal active" style="transition-delay: 0.2s;">
+                    <div class="mb-8 w-20 h-20 bg-on-primary/10 rounded-full flex items-center justify-center">
+                        <span class="material-symbols-outlined text-4xl" data-icon="speed">speed</span>
+                    </div>
+                    <h3 class="font-headline-sm mb-4">Efficiency boost 300%</h3>
+                    <p class="opacity-80">Let tedious writing become a pleasant click, focusing more energy on the creativity itself.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-xl px-gutter text-center">
+            <div class="max-w-3xl mx-auto glass-card p-16 rounded-[3rem] border border-primary/10 ai-glow reveal active">
+                <h2 class="font-display-lg-mobile md:font-display-lg mb-8 text-on-surface">Ready to say goodbye to "machine feel"?</h2>
+                <p class="font-body-lg text-on-surface-variant mb-12">Join 10,000+ professional creators and experience the future of writing.</p>
+                <!-- 底部CTA按钮：改成了 /app -->
+                <a href="/app" class="bg-primary text-on-primary px-12 py-5 rounded-full font-headline-sm transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/20 inline-block">Get Started for Free</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-surface border-t border-outline-variant/30 mt-20 transition-all duration-300">
+        <div class="flex flex-col md:flex-row justify-between items-center px-gutter py-xl max-w-container-max mx-auto gap-8">
+            <div class="flex flex-col items-center md:items-start gap-4">
+                <div class="flex items-center gap-2">
+                    <img alt="RealSkill Logo" class="h-8 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCY06T78qdD8LoadDzL-ZjOuDXiCeQHnNnD8a-h0JMgmwD-X_UatGZ7O6PBVvjr95nFlqrpCTbGybVUaN8RJTd5BeIgugy3dVZ5UYsP-s18OSfigbqT0JlxQpLuhV8MUgh2KH6mV-9f0rZmRmdIojyEu7cIqJx-bpM3CiXBK-No0M-NVCJCxvJWpN7g7ZnevQbi9aguPgHE7dtXeuZ7pr30NvyQGc5slyVKiR6RevPCVzF0Ep-5NcIUqliAIidBRsqj36ahfdsFZ1pG"/>
+                    <div class="font-headline-sm text-headline-sm font-bold text-on-surface">RealSkill</div>
+                </div>
+                <p class="text-on-surface-variant font-label-md">© 2024 RealSkill AI. All rights reserved.</p>
+            </div>
+            <nav class="flex flex-wrap justify-center gap-8">
+                <a class="text-on-surface-variant font-medium hover:text-primary underline font-label-md" href="#">Privacy Policy</a>
+                <a class="text-on-surface-variant font-medium hover:text-primary underline font-label-md" href="#">Terms of Service</a>
+                <a class="text-on-surface-variant font-medium hover:text-primary underline font-label-md" href="#">Contact Us</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        function initializeHeroTitleAnimation() {
+            const titleContainer = document.getElementById('title-line-1');
+            if (titleContainer) {
+                const titleText = titleContainer.textContent;
+                titleContainer.innerHTML = '';
+                titleText.split('').forEach((char, index) => {
+                    const span = document.createElement('span');
+                    span.textContent = char;
+                    span.className = 'char-reveal';
+                    span.style.animationDelay = `${index * 0.05}s`;
+                    titleContainer.appendChild(span);
+                });
+            }
+        }
+
+        initializeHeroTitleAnimation();
+
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            const triggerBottom = window.innerHeight * 0.85;
+            revealElements.forEach(el => {
+                const elTop = el.getBoundingClientRect().top;
+                if (elTop < triggerBottom) {
+                    el.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll();
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === "#") return;
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.floating-element');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+
+            orbs.forEach((orb, index) => {
+                const depth = (index + 1) * 15;
+                const moveX = (mouseX - 0.5) * depth;
+                const moveY = (mouseY - 0.5) * depth;
+                orb.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('py-2', 'bg-white/95');
+                header.classList.remove('py-4');
+            } else {
+                header.classList.remove('py-2', 'bg-white/95');
+                header.classList.add('py-4');
+            }
+        });
+    </script>
+</body>
+</html>
