@@ -161,6 +161,5 @@ RealSkill addresses a real pain point for millions of content creators. Potentia
 | **Phase 2** | Enterprise SaaS | Customized copywriting engine for MCN agencies and brands |
 | **Phase 3** | Platform Integration | One-click publish to Xiaohongshu/Zhihu via platform APIs |
 
-Target market: 10M+ Chinese social media creators, expanding to global platforms.
 
 Built for the UCWS Hackathon — Skill Track.
