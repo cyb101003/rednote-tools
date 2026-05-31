@@ -20,6 +20,14 @@ It reduces AI detection scores and mimics genuine user-generated content, helpin
 - **Beautiful Streamlit Demo**  
   Includes a modern web UI for quick testing and visualisation.
 
+  ## 🌍 Global Potential
+
+RealSkill currently targets Chinese platforms, but its architecture is **language-agnostic**:
+
+- **Multi-language ready**: Replace prompt templates with any language — English, Japanese, Korean — and the same multi-agent pipeline works immediately.
+- **Standard Skill interface**: Any AI agent worldwide can discover and call RealSkill via `/.well-known/skill.json`.
+- **Platform-extensible**: Add support for Twitter, Instagram, LinkedIn by adding new prompt templates and seed data — no core code changes needed.
+
 ## 🧠 How it works
 
 
@@ -142,5 +150,17 @@ docker build -t realskill .
 docker run -d -p 8000:8000 -e OPENAI_API_KEY=your_key -e OPENAI_BASE_URL=... realskill
 📄 License
 MIT – feel free to use, extend, or integrate into your own agents.
+
+## 💼 Monetization Roadmap
+
+RealSkill addresses a real pain point for millions of content creators. Potential monetization paths:
+
+| Stage | Model | Description |
+|-------|-------|-------------|
+| **Phase 1** | Freemium API | Free tier (10 generations/day), paid tier ($9.99/month for unlimited) |
+| **Phase 2** | Enterprise SaaS | Customized copywriting engine for MCN agencies and brands |
+| **Phase 3** | Platform Integration | One-click publish to Xiaohongshu/Zhihu via platform APIs |
+
+Target market: 10M+ Chinese social media creators, expanding to global platforms.
 
 Built for the UCWS Hackathon — Skill Track.
