@@ -78,7 +78,7 @@ python build_index.py
 Your agent can now call from skill_entry import generate and use the Skill locally.
 
 ## Project Structure
-bash
+`
 rednote-tools/
 ├── main.py                # FastAPI server & Skill endpoints
 ├── app.py                 # Streamlit demo UI
@@ -100,7 +100,7 @@ rednote-tools/
 ├── requirements.txt
 ├── Dockerfile
 └── .env.example
-
+`  
 
 🚀 Quick Start (Local)
 1. Clone & set up environment
