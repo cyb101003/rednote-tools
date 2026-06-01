@@ -77,7 +77,7 @@ bash
 python build_index.py
 Your agent can now call from skill_entry import generate and use the Skill locally.
 
-## Project Structure
+## 📂 Project Structure
 `
 rednote-tools/
 ├── main.py                # FastAPI server & Skill endpoints
