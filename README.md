@@ -93,6 +93,8 @@ rednote-tools/
 │   └── prompts.py         # Prompt templates for all agents
 ├── collectors/
 │   └── xiaohongshu.py     # Playwright-based live scraper
+├── frontend/
+│   └── index.html     # Home page
 ├── data/
 │   └── seed_data.py       # Built-in viral samples
 ├── requirements.txt
