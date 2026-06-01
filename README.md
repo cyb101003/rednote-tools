@@ -77,14 +77,15 @@ bash
 python build_index.py
 Your agent can now call from skill_entry import generate and use the Skill locally.
 
-🗂 Project Structure
+## Project Structure
+```bash
 rednote-tools/
 ├── main.py                # FastAPI server & Skill endpoints
 ├── app.py                 # Streamlit demo UI
 ├── skill_manifest.py      # Skill definition (OpenAI function format)
 ├── build_skill_zip.py     # Script to create the Agent Skill ZIP
 ├── build_index.py         # ChromaDB vector index builder
-├── core/                  # Core logic
+├── core/
 │   ├── generator.py       # RAG + multi-agent generation
 │   ├── judge.py           # Scoring & AI detection
 │   └── humanize.py        # LLM + rule-based post-processing
@@ -99,6 +100,7 @@ rednote-tools/
 ├── requirements.txt
 ├── Dockerfile
 └── .env.example
+
 
 🚀 Quick Start (Local)
 1. Clone & set up environment
