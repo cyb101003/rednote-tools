@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>RealSkill - Agent Skill for Social Copy</title>
+<meta content="RealSkill is a web studio and local agent skill for platform-native social copy generation." name="description"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#6edab7",
+            "surface-container-high": "#ede7e6",
+            "primary-container": "#dd2c49",
+            "surface-container": "#f3ecec",
+            "inverse-surface": "#323030",
+            "on-secondary-fixed": "#00201e",
+            "panel-white": "#ffffff",
+            "secondary-fixed-dim": "#79d6cf",
+            "on-primary-fixed-variant": "#920025",
+            "amber": "#b97818",
+            "on-primary-container": "#fffbff",
+            "tertiary-fixed": "#8bf6d3",
+            "error": "#ba1a1a",
+            "on-error": "#ffffff",
+            "tertiary-container": "#008468",
+            "tertiary": "#006952",
+            "secondary-fixed": "#95f3eb",
+            "background": "#fff8f7",
+            "on-surface": "#1d1b1b",
+            "inverse-primary": "#ffb3b5",
+            "secondary-container": "#95f3eb",
+            "surface-container-lowest": "#ffffff",
+            "inverse-on-surface": "#f6efef",
+            "blue": "#2759c7",
+            "glass-surface": "rgba(255, 255, 255, 0.82)",
+            "on-primary-fixed": "#40000b",
+            "on-primary": "#ffffff",
+            "secondary": "#006a65",
+            "on-tertiary-fixed": "#002117",
+            "surface-bright": "#fff8f7",
+            "paper-bg": "#f4f1ea",
+            "border-subtle": "#ded4c7",
+            "primary-fixed-dim": "#ffb3b5",
+            "on-tertiary-container": "#f5fff9",
+            "outline-variant": "#e4bdbe",
+            "on-tertiary-fixed-variant": "#00513e",
+            "surface-container-highest": "#e7e1e0",
+            "muted-text": "#645f58",
+            "on-tertiary": "#ffffff",
+            "surface-tint": "#bd0b35",
+            "outline": "#8f6f70",
+            "primary-fixed": "#ffdada",
+            "surface-container-low": "#f9f2f1",
+            "surface-dim": "#dfd9d8",
+            "primary": "#b90533",
+            "on-error-container": "#93000a",
+            "on-background": "#1d1b1b",
+            "on-secondary-container": "#00716b",
+            "surface-variant": "#e7e1e0",
+            "error-container": "#ffdad6",
+            "on-surface-variant": "#5b4040",
+            "on-secondary": "#ffffff",
+            "surface": "#fff8f7",
+            "on-secondary-fixed-variant": "#00504c"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.5rem",
+            "lg": "1rem",
+            "xl": "1.5rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "sans": ["Inter", "ui-sans-serif", "system-ui"],
+            "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #fff8f7;
+      color: #1d1b1b;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .wrap { width: min(1200px, calc(100% - 48px)); margin: 0 auto; }
+    
+    .noise-bg {
+      position: relative;
+    }
+    .noise-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.02;
+      z-index: 0;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #fff;
+      box-shadow: 0 12px 26px rgba(185, 5, 51, 0.2);
+    }
+    #langSelect {
+      min-height: 42px;
+      border: 1px solid #ded4c7 !important;
+      border-radius: 8px !important;
+      background: rgba(255, 255, 255, 0.72) !important;
+      color: #645f58 !important;
+      padding: 9px 12px !important;
+      font-size: 13px !important;
+      font-weight: 800 !important;
+      line-height: 1.2 !important;
+      cursor: pointer;
+      white-space: nowrap;
+      appearance: auto !important;
+      -webkit-appearance: auto !important;
+      background-image: none !important;
+      box-shadow: none !important;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+    }
+    #langSelect:hover {
+      transform: translateY(-1px);
+      border-color: rgba(24, 23, 22, 0.2) !important;
+      box-shadow: 0 10px 24px rgba(24, 23, 22, 0.08) !important;
+      color: #151313 !important;
+    }
+    body.noise-bg::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 1;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(185, 5, 51, 0.08), transparent 34%),
+        radial-gradient(circle at 92% 18%, rgba(0, 106, 101, 0.08), transparent 32%),
+        linear-gradient(rgba(29, 27, 27, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29, 27, 27, 0.02) 1px, transparent 1px);
+      background-size: auto, auto, 48px 48px, 48px 48px;
+    }
+
+    .hero-gradient {
+      background: radial-gradient(circle at 0% 0%, rgba(185, 5, 51, 0.05) 0%, transparent 40%),
+                  radial-gradient(circle at 100% 100%, rgba(0, 106, 101, 0.05) 0%, transparent 40%);
+    }
+
+    .step-line::after {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      right: -50%;
+      height: 2px;
+      background: #e4bdbe;
+      z-index: -1;
+    }
+    .step-line:last-child::after { display: none; }
+
+    @media (max-width: 1024px) {
+      .step-line::after { display: none; }
+    }
+
+    .terminal-header {
+      background: #f3ecec;
+      border-bottom: 1px solid #e7e1e0;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .glow-primary {
+      box-shadow: 0 0 40px -10px rgba(185, 5, 51, 0.3);
+    }
+
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+      border-color: #8f6f70;
+    }
+    @media (max-width: 640px) {
+      header .wrap {
+        width: min(100% - 16px, 1200px);
+        height: 64px !important;
+      }
+      header .brand-logo {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+      }
+      header a[href="/"] {
+        gap: 8px !important;
+        font-size: 18px !important;
+        line-height: 1 !important;
+      }
+      header nav { gap: 6px !important; }
+      header nav a[data-i18n="navSkill"] { display: none; }
+      header nav a[data-i18n="navLaunch"] {
+        min-height: 38px;
+        padding: 8px 10px !important;
+        font-size: 12px !important;
+        white-space: nowrap;
+      }
+      #langSelect {
+        width: 86px !important;
+        min-height: 38px;
+        padding: 7px 8px !important;
+        font-size: 12px !important;
+      }
+    }
+  </style>
+</head>
+<body class="noise-bg">
+<header class="sticky top-0 z-50 glass border-b border-outline-variant/30">
+<div class="wrap flex items-center justify-between h-20">
+<a class="flex items-center gap-3 font-black text-2xl tracking-tight" href="/">
+<img class="brand-logo" src="/static/assets/realskill-logo.jpg" alt="RealSkill logo"/>
+<span>RealSkill</span>
+</a>
+<nav class="flex items-center gap-6">
+<div class="block">
+<select aria-label="Language" class="bg-surface-container-low border-outline-variant rounded-lg text-sm font-semibold px-3 py-1.5 focus:ring-2 focus:ring-primary outline-none" id="langSelect">
+<option value="en">English</option>
+<option value="zh">简中</option>
+<option value="zhHant">繁中</option>
+<option value="ja">日本語</option>
+<option value="ko">한국어</option>
+<option value="ms">Malay</option>
+<option value="fr">Français</option>
+</select>
+</div>
+<a class="text-sm font-bold text-muted-text hover:text-on-surface transition-colors" data-i18n="navSkill" href="/.well-known/skill.json">Skill JSON</a>
+<a class="bg-inverse-surface text-surface py-2.5 px-6 rounded-lg font-bold text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-black/5" data-i18n="navLaunch" href="/app">Launch Studio</a>
+</nav>
+</div>
+</header>
+<main class="wrap">
+<!-- Hero Section -->
+<section class="py-20 lg:py-32 grid lg:grid-cols-12 gap-12 items-start">
+<div class="lg:col-span-7 flex flex-col gap-10">
+<div class="space-y-6">
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded-full bg-surface-container-highest text-[11px] font-black uppercase tracking-wider text-muted-text border border-outline-variant/30" data-i18n="badge1">Creator workflow</span>
+<span class="px-3 py-1 rounded-full bg-surface-container-highest text-[11px] font-black uppercase tracking-wider text-muted-text border border-outline-variant/30" data-i18n="badge2">Web studio</span>
+<span class="px-3 py-1 rounded-full bg-surface-container-highest text-[11px] font-black uppercase tracking-wider text-muted-text border border-outline-variant/30" data-i18n="badge3">Local agent skill</span>
+</div>
+<h1 class="text-6xl md:text-7xl lg:text-8xl font-black leading-[1.05] tracking-tight text-on-background" data-i18n="heroTitle">
+          Turn ideas into <span class="text-primary">native</span> social copy.
+        </h1>
+<p class="text-xl md:text-2xl text-muted-text leading-relaxed max-w-2xl font-medium" data-i18n="heroLead">
+          A multi-agent writing panel that retrieves viral memory, drafts from unique creator instincts, and returns transparent reports.
+        </p>
+</div>
+<div class="flex flex-wrap gap-4">
+<a class="bg-primary text-white px-10 py-5 rounded-xl font-bold text-lg hover:brightness-110 glow-primary transition-all flex items-center gap-2" data-i18n="heroCta" href="/app">
+          Launch Studio
+</a>
+<a class="bg-surface-container-lowest border border-outline-variant px-10 py-5 rounded-xl font-bold text-lg hover:bg-surface transition-all" data-i18n="heroSecondary" href="#how">
+          See workflow
+        </a>
+</div>
+<div class="grid grid-cols-3 gap-1 bg-surface-container-low p-1 rounded-2xl border border-outline-variant/40 mt-4">
+<div class="bg-surface-container-lowest p-6 rounded-xl flex flex-col gap-1">
+<span class="text-4xl font-black text-on-surface">3</span>
+<span class="text-[10px] font-black uppercase tracking-widest text-muted-text" data-i18n="proof1">Writing Agents</span>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl flex flex-col gap-1">
+<span class="text-4xl font-black text-on-surface">RAG</span>
+<span class="text-[10px] font-black uppercase tracking-widest text-muted-text" data-i18n="proof2">Viral Memory</span>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl flex flex-col gap-1">
+<span class="text-4xl font-black text-on-surface">API</span>
+<span class="text-[10px] font-black uppercase tracking-widest text-muted-text" data-i18n="proof3">Agent Skill</span>
+</div>
+</div>
+</div>
+<!-- Agent Interface Sidebar -->
+<div class="lg:col-span-5">
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-2xl overflow-hidden">
+<div class="terminal-header">
+<div class="dot bg-[#ff5f56]"></div>
+<div class="dot bg-[#ffbd2e]"></div>
+<div class="dot bg-[#27c93f]"></div>
+<div class="ml-4 text-[10px] font-black tracking-widest text-muted-text/50 uppercase">AGENT_RUNTIME_V2</div>
+</div>
+<div class="p-8 space-y-6">
+<div class="flex items-center justify-between mb-2">
+<h2 class="text-sm font-black uppercase tracking-widest text-on-surface" data-i18n="demoTitle">Output Comparison</h2>
+<div class="flex items-center gap-2 px-2 py-1 rounded-md bg-blue/10 text-blue font-bold text-[10px] uppercase tracking-wider">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-blue"></span>
+</span>
+              Live style
+            </div>
+</div>
+<div class="space-y-4">
+<div class="group">
+<div class="text-[10px] font-bold text-muted-text/60 mb-1 flex items-center gap-1 uppercase">
+<span class="material-symbols-outlined text-[12px]">chat_bubble</span> Generic AI
+              </div>
+<div class="bg-surface-container text-muted-text p-4 rounded-xl text-sm leading-relaxed border border-outline-variant/30 italic" data-i18n="beforeCopy">
+                Here are some affordable food options near campus. You can try local snacks and enjoy your weekend.
+              </div>
+</div>
+<div class="flex justify-center py-2">
+<span class="material-symbols-outlined text-outline-variant">keyboard_double_arrow_down</span>
+</div>
+<div class="group">
+<div class="text-[10px] font-bold text-primary mb-1 flex items-center gap-1 uppercase">
+<span class="material-symbols-outlined text-[12px]">auto_awesome</span> RealSkill Agentic
+              </div>
+<div class="bg-white p-5 rounded-xl text-on-surface text-base font-medium leading-relaxed border-2 border-primary/20 shadow-sm" data-i18n="afterCopy">
+                说真的，周末别再只点外卖了...<br/>学校旁边那个小摊真的有点东西<br/>十刀以内吃到撑，还很像本地人才知道的路线
+              </div>
+</div>
+</div>
+<div class="pt-6 border-t border-outline-variant flex flex-wrap gap-2">
+<span class="px-2.5 py-1.5 rounded-md bg-error-container text-error text-[10px] font-black uppercase tracking-widest" data-i18n="tag1">human rhythm</span>
+<span class="px-2.5 py-1.5 rounded-md bg-tertiary-container/10 text-tertiary text-[10px] font-black uppercase tracking-widest" data-i18n="tag2">platform fit</span>
+<span class="px-2.5 py-1.5 rounded-md bg-blue/10 text-blue text-[10px] font-black uppercase tracking-widest" data-i18n="tag3">agent report</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- How it Works Section -->
+<section class="py-32" id="how">
+<div class="text-center mb-20 space-y-4">
+<h2 class="text-4xl md:text-5xl font-black tracking-tight" data-i18n="howTitle">The Agentic Workflow</h2>
+<p class="text-lg text-muted-text max-w-2xl mx-auto" data-i18n="howLead">RealSkill is not just a prompt. It is a orchestrated multi-agent system designed for the future of social content.</p>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
+<div class="step-line relative flex flex-col items-center text-center group">
+<div class="w-20 h-20 rounded-2xl bg-surface-container-low border border-outline-variant flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all">
+<span class="text-2xl font-black">01</span>
+</div>
+<h3 class="font-black text-lg mb-2" data-i18n="step1Title">Input Brief</h3>
+<p class="text-sm text-muted-text px-4" data-i18n="step1Text">Topic, platform, and optional creator references.</p>
+</div>
+<div class="step-line relative flex flex-col items-center text-center group">
+<div class="w-20 h-20 rounded-2xl bg-surface-container-low border border-outline-variant flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all">
+<span class="text-2xl font-black">02</span>
+</div>
+<h3 class="font-black text-lg mb-2" data-i18n="step2Title">Retrieve Memory</h3>
+<p class="text-sm text-muted-text px-4" data-i18n="step2Text">Pull relevant viral examples from local Chroma memory.</p>
+</div>
+<div class="step-line relative flex flex-col items-center text-center group">
+<div class="w-20 h-20 rounded-2xl bg-surface-container-low border border-outline-variant flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all">
+<span class="text-2xl font-black">03</span>
+</div>
+<h3 class="font-black text-lg mb-2" data-i18n="step3Title">Agent Panel</h3>
+<p class="text-sm text-muted-text px-4" data-i18n="step3Text">Three distinct creator drafts generated in parallel.</p>
+</div>
+<div class="step-line relative flex flex-col items-center text-center group">
+<div class="w-20 h-20 rounded-2xl bg-surface-container-low border border-outline-variant flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all">
+<span class="text-2xl font-black">04</span>
+</div>
+<h3 class="font-black text-lg mb-2" data-i18n="step4Title">Judge Report</h3>
+<p class="text-sm text-muted-text px-4" data-i18n="step4Text">Score platform fit, tone, and spread potential.</p>
+</div>
+<div class="step-line relative flex flex-col items-center text-center group">
+<div class="w-20 h-20 rounded-2xl bg-surface-container-low border border-outline-variant flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all">
+<span class="text-2xl font-black">05</span>
+</div>
+<h3 class="font-black text-lg mb-2" data-i18n="step5Title">Copy/Export</h3>
+<p class="text-sm text-muted-text px-4" data-i18n="step5Text">Final copy, report, and drafts as reusable assets.</p>
+</div>
+</div>
+</section>
+<!-- Global Expansion -->
+<section class="py-32">
+<div class="grid lg:grid-cols-2 gap-20 items-center">
+<div class="space-y-8">
+<h2 class="text-4xl md:text-5xl font-black leading-tight" data-i18n="globalTitle">Built for global creator teams.</h2>
+<p class="text-xl text-muted-text leading-relaxed" data-i18n="globalLead">The workflow supports major global social platforms, with architecture designed for localized expansion.</p>
+<div class="grid gap-4">
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/40 flex gap-4 card-hover">
+<div class="bg-white w-12 h-12 rounded-xl border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">translate</span>
+</div>
+<div>
+<h3 class="font-black text-lg mb-1" data-i18n="global1Title">Language-ready UI</h3>
+<p class="text-sm text-muted-text" data-i18n="global1Text">English, Chinese, Japanese, Korean, Malay, and French entry points.</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/40 flex gap-4 card-hover">
+<div class="bg-white w-12 h-12 rounded-xl border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-blue">hub</span>
+</div>
+<div>
+<h3 class="font-black text-lg mb-1" data-i18n="global2Title">Agent Skill Interface</h3>
+<p class="text-sm text-muted-text" data-i18n="global2Text">Call the core capabilities via Codex, OpenClaw, or LangChain.</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/40 flex gap-4 card-hover">
+<div class="bg-white w-12 h-12 rounded-xl border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-tertiary">groups</span>
+</div>
+<div>
+<h3 class="font-black text-lg mb-1" data-i18n="global3Title">Team Collaborative Path</h3>
+<p class="text-sm text-muted-text" data-i18n="global3Text">Designed for creator teams, agencies, and campus communities.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-inverse-surface rounded-3xl p-12 text-white relative overflow-hidden shadow-2xl">
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary/20 rounded-full blur-[80px]"></div>
+<div class="relative z-10 space-y-8">
+<h2 class="text-4xl font-black" data-i18n="ctaTitle">Ready to run the agent panel?</h2>
+<p class="text-lg text-white/70" data-i18n="ctaLead">Open the studio, enter a topic, and witness the power of platform-native generation.</p>
+<a class="inline-flex items-center gap-3 bg-white text-on-background px-10 py-5 rounded-xl font-bold text-lg hover:scale-105 transition-all" data-i18n="ctaButton" href="/app">
+            Launch Studio
+</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>
+    const baseText = {};
+    document.querySelectorAll("[data-i18n]").forEach((node) => { baseText[node.dataset.i18n] = node.textContent; });
+
+    const landingTranslations = {
+      en: {},
+      zh: {
+        navLaunch: "进入工作台", badge1: "创作者工作流", badge2: "网页版工作台", badge3: "本地 Agent Skill",
+        heroTitle: "让想法变成<span class='text-primary'>原生</span>社交文案。", heroLead: "一个多 Agent 写作面板：检索爆款记忆，用不同创作者直觉生成草稿，并返回透明报告。",
+        heroCta: "进入工作台", heroSecondary: "查看流程", proof1: "差异化 Agent", proof2: "爆款记忆", proof3: "Agent Skill",
+        demoTitle: "输出对比", beforeCopy: "普通 AI 文案：\n这里有一些校园附近的平价美食。你可以尝试本地小吃，享受周末。", afterCopy: "RealSkill 输出：\n说真的，周末别再只点外卖了...\n学校旁边那个小摊真的有点东西\n十刀以内吃到撑，还很像本地人才知道的路线",
+        tag1: "真人节奏", tag2: "平台适配", tag3: "Agent 报告", howTitle: "Agent 工作流", howLead: "RealSkill 不只是 Prompt，它是为未来社交内容而设计的多 Agent 协同系统。",
+        step1Title: "输入 Brief", step1Text: "主题、平台、可选创作者参考。", step2Title: "检索记忆", step2Text: "从本地 Chroma 记忆中拉取爆款样本。", step3Title: "Agent 面板", step3Text: "三个差异化创作者草稿同步生成。", step4Title: "裁判报告", step4Text: "评分平台适配度、语气和传播潜力。", step5Title: "复制/导出", step5Text: "把最终文案、报告和草稿变成可复用资产。",
+        globalTitle: "为全球创作者团队设计。", globalLead: "支持各大全球社交平台，架构设计专为本地化扩展而优化。",
+        global1Title: "多语言 UI", global1Text: "英文、中文、日语、韩语、Malay、法语入口。", global2Title: "Agent Skill 接口", global2Text: "通过 Codex、OpenClaw 或 LangChain 调用核心能力。", global3Title: "团队协作路径", global3Text: "专为创作者团队、品牌机构和校园社群设计。",
+        ctaTitle: "准备运行 Agent 面板？", ctaLead: "进入工作台，输入主题，见证平台原生生成的力量。", ctaButton: "进入工作台"
+      }
+    };
+    landingTranslations.zhHant = { ...landingTranslations.zh, navLaunch: "進入工作台", badge1: "創作者工作流", badge2: "網頁版工作台", heroTitle: "讓想法變成<span class='text-primary'>原生</span>社交文案。", heroCta: "進入工作台", ctaButton: "進入工作台" };
+    landingTranslations.ja = { ...landingTranslations.en, navLaunch: "Studio を開く", heroTitle: "アイデアを<span class='text-primary'>ネイティブ</span>なSNSコピーに。", heroLead: "バイラル記憶、複数エージェント、審査レポートを備えたソーシャルコピー生成スキルです。", heroCta: "Studio を開く", howTitle: "エージェント・ワークフロー", globalTitle: "グローバル展開を意識した設計", ctaButton: "Studio を開く" };
+    landingTranslations.ko = { ...landingTranslations.en, navLaunch: "스튜디오 열기", heroTitle: "아이디어를 <span class='text-primary'>네이티브</span> 소셜 카피로.", heroCta: "스튜디오 열기", howTitle: "에이전트 워크플로우", globalTitle: "글로벌 확장을 위한 설계", ctaButton: "스튜디오 열기" };
+    landingTranslations.ms = { ...landingTranslations.en, navLaunch: "Buka Studio", heroTitle: "Tukar idea kepada salinan sosial <span class='text-primary'>asli</span>.", heroCta: "Buka Studio", howTitle: "Aliran Kerja Agentic", globalTitle: "Direka untuk pengembangan global", ctaButton: "Buka Studio" };
+    landingTranslations.fr = { ...landingTranslations.en, navLaunch: "Ouvrir le studio", heroTitle: "Transformez vos idées en copy social <span class='text-primary'>natif</span>.", heroCta: "Ouvrir le studio", howTitle: "Flux de Travail Agentique", globalTitle: "Conçu pour l'expansion internationale", ctaButton: "Ouvrir le studio" };
+
+    const select = document.getElementById("langSelect");
+    function applyLang(lang) {
+      const dict = landingTranslations[lang] || {};
+      document.documentElement.lang = lang;
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        const key = node.dataset.i18n;
+        const text = dict[key] || baseText[key] || "";
+        if (text.includes('<')) {
+          node.innerHTML = text;
+        } else {
+          node.textContent = text;
+        }
+      });
+      localStorage.setItem("realskill_lang", lang);
+    }
+    const savedLang = "en";
+    select.value = savedLang;
+    select.addEventListener("change", () => applyLang(select.value));
+    applyLang(savedLang);
+</script>
+</body></html>

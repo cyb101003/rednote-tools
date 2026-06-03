@@ -1,0 +1,1274 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RealSkill Report</title>
+  <meta name="description" content="RealSkill generation report with final copy, agent drafts, and analysis charts.">
+  <style>
+    :root {
+      --bg: #f8f7f3;
+      --panel: #ffffff;
+      --ink: #181716;
+      --muted: #68645f;
+      --line: #e7ded2;
+      --red: #e7344f;
+      --teal: #007c76;
+      --amber: #b97818;
+      --blue: #2759c7;
+      --blue-soft: #eef3ff;
+      --teal-soft: #e8f7f4;
+      --amber-soft: #fff4d8;
+      --shadow: 0 18px 52px rgba(24, 23, 22, 0.09);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, select { font: inherit; }
+    .wrap { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(228, 189, 190, 0.3);
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .topbar-inner {
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 900; font-size: 24px; letter-spacing: -0.03em; }
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #fff;
+      box-shadow: 0 12px 26px rgba(231, 52, 79, 0.2);
+    }
+    .nav { display: flex; align-items: center; gap: 8px; }
+    .nav a, .nav button, .nav select {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 9px 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+      appearance: auto;
+      -webkit-appearance: auto;
+      background-image: none;
+    }
+    .nav .primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .hero {
+      padding: 30px 0 18px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 58px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+    .lead { color: var(--muted); margin: 12px 0 0; line-height: 1.55; max-width: 660px; }
+    .btn {
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      font-weight: 900;
+    }
+    .btn-primary { background: var(--red); color: #fff; }
+    .btn-ghost { border: 1px solid var(--line); background: #fff; color: var(--muted); }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(330px, 0.88fr);
+      gap: 16px;
+      align-items: start;
+      padding-bottom: 42px;
+    }
+    .panel, .metric, .agent, .note, .empty {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .panel { padding: 18px; }
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .panel-head h2, .panel h3 { margin: 0; }
+    .copy {
+      white-space: pre-wrap;
+      line-height: 1.72;
+      color: #292725;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 16px;
+      min-height: 260px;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .metric {
+      padding: 12px;
+      box-shadow: none;
+    }
+    .metric b { display: block; font-size: 24px; margin-bottom: 4px; }
+    .metric span { color: var(--muted); font-size: 12px; font-weight: 800; }
+    .note-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .note {
+      padding: 12px;
+      min-height: 112px;
+      box-shadow: none;
+    }
+    .note b { display: block; font-size: 13px; margin-bottom: 6px; }
+    .note p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 13px; }
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .compare-box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 14px;
+      min-height: 190px;
+    }
+    .compare-box.realskill {
+      border-color: rgba(231, 52, 79, 0.34);
+      background: linear-gradient(180deg, #fff, #fff8f8);
+    }
+    .compare-box b { display: block; margin-bottom: 8px; font-size: 14px; }
+    .compare-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.62;
+      white-space: pre-wrap;
+      font-size: 13px;
+    }
+    .diff-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .diff-item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+    .diff-item::before {
+      content: "";
+      display: block;
+      width: 18px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--red);
+      margin-bottom: 8px;
+    }
+    .share-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #15120f;
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.94), rgba(255,244,216,0.9)),
+        #fff;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+    .share-card::after {
+      content: "";
+      position: absolute;
+      right: -42px;
+      top: -42px;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(231, 52, 79, 0.10);
+      pointer-events: none;
+    }
+    .share-top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .share-brand { display: flex; align-items: center; gap: 10px; font-weight: 950; }
+    .share-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .share-badge {
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: #181716;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .share-topic {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 12px;
+      font-size: 24px;
+      line-height: 1.16;
+      letter-spacing: 0;
+    }
+    .share-metrics {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .share-metric {
+      border: 1px solid rgba(24, 23, 22, 0.12);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.75);
+      padding: 9px;
+    }
+    .share-metric b { display: block; font-size: 17px; margin-bottom: 3px; }
+    .share-metric span { display: block; color: var(--muted); font-size: 11px; font-weight: 900; }
+    .share-copy {
+      position: relative;
+      z-index: 1;
+      border-left: 4px solid var(--red);
+      padding-left: 10px;
+      color: #2a2623;
+      line-height: 1.58;
+      white-space: pre-wrap;
+      font-size: 13px;
+      margin: 0;
+    }
+    .chart-panel { display: grid; gap: 14px; }
+    .score-row { display: grid; gap: 8px; }
+    .score-label {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .bar-shell {
+      height: 12px;
+      border-radius: 999px;
+      background: #eee8df;
+      overflow: hidden;
+    }
+    .bar {
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--red), var(--amber), var(--teal));
+    }
+    .radar {
+      width: min(260px, 100%);
+      aspect-ratio: 1;
+      margin: 6px auto 0;
+      display: block;
+    }
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .agent {
+      padding: 12px;
+      box-shadow: none;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .agent.winner {
+      border-color: rgba(231, 52, 79, 0.48);
+      box-shadow: 0 0 0 3px rgba(231, 52, 79, 0.08);
+    }
+    .agent-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .strength {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .agent-copy {
+      margin: 0;
+      white-space: pre-wrap;
+      line-height: 1.58;
+      font-size: 13px;
+      color: #333;
+      max-height: 176px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+    .empty {
+      margin: 36px auto;
+      padding: 22px;
+      max-width: 620px;
+      text-align: center;
+    }
+    .empty p { color: var(--muted); line-height: 1.55; }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      z-index: 90;
+      transform: translateX(-50%) translateY(80px);
+      opacity: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: var(--ink);
+      color: #fff;
+      font-weight: 900;
+      transition: all 0.2s ease;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    @media (max-width: 960px) {
+      .hero { align-items: start; flex-direction: column; }
+      .layout {
+        display: flex;
+        flex-direction: column;
+      }
+      .layout > div { display: contents; }
+      .layout > div > section:nth-child(1) { order: 1; }
+      .layout > aside { order: 2; }
+      .layout > div > section:nth-child(2) { order: 3; }
+      .layout > div > section:nth-child(3) { order: 4; }
+      .agent-grid { grid-template-columns: 1fr; }
+      .agent { min-height: 0; }
+      .agent-copy { max-height: 150px; }
+    }
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 24px, 1180px); }
+      .brand span:last-child { display: none; }
+      .nav { gap: 6px; }
+      .nav a, .nav button, .nav select { padding: 8px 9px; font-size: 12px; }
+      .hero { padding-top: 22px; }
+      .panel { padding: 14px; }
+      .panel-head { align-items: flex-start; flex-direction: column; }
+      .panel-head .btn, .hero .btn { width: 100%; }
+      .metrics, .note-grid, .comparison, .diff-list, .share-metrics { grid-template-columns: 1fr; }
+      .copy { min-height: 200px; }
+      .share-topic { font-size: 21px; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .hero, .panel, .share-card { animation: riseIn 0.5s ease both; }
+      .layout aside { animation: riseIn 0.6s ease both; }
+    }
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    body {
+      background:
+        radial-gradient(circle at 12% 8%, rgba(231,52,79,0.08), transparent 30%),
+        radial-gradient(circle at 88% 10%, rgba(0,124,118,0.08), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,0.84), rgba(255,255,255,0) 34%),
+        var(--bg);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.32;
+      background-image:
+        linear-gradient(rgba(24,23,22,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(24,23,22,0.03) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(180deg, #000, transparent 72%);
+    }
+    .topbar { box-shadow: 0 8px 30px rgba(24,23,22,0.045); }
+    .mark { box-shadow: inset 0 1px 0 rgba(255,255,255,0.32), 0 10px 22px rgba(231,52,79,0.22); }
+    .nav a, .nav button, .nav select, .btn, .panel, .metric, .note, .compare-box, .diff-item, .agent, .share-card {
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+    }
+    .nav a:hover, .nav button:hover, .nav select:hover, .btn-ghost:hover {
+      transform: translateY(-1px);
+      border-color: rgba(24,23,22,0.2);
+      box-shadow: 0 10px 24px rgba(24,23,22,0.08);
+      color: var(--ink);
+    }
+    .nav .primary:hover, .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(231,52,79,0.25);
+    }
+    .panel, .metric, .agent, .note, .empty, .share-card {
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(10px);
+      border-color: rgba(24,23,22,0.10);
+    }
+    .panel:hover, .share-card:hover {
+      border-color: rgba(0,124,118,0.18);
+      box-shadow: 0 24px 58px rgba(24,23,22,0.11);
+    }
+    .metric:hover, .note:hover, .diff-item:hover, .agent:hover {
+      transform: translateY(-2px);
+      border-color: rgba(0,124,118,0.22);
+      box-shadow: 0 14px 30px rgba(24,23,22,0.08);
+    }
+    .copy, .compare-box {
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.88);
+    }
+    .copy {
+      background:
+        linear-gradient(180deg, #fff, #fffdfa);
+      border-color: rgba(24,23,22,0.10);
+    }
+    .metric b {
+      font-variant-numeric: tabular-nums;
+    }
+    .share-card {
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,244,216,0.88)),
+        #fff;
+    }
+    .share-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--red), var(--amber), var(--teal));
+      z-index: 1;
+    }
+    .share-metric {
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
+    }
+    .bar {
+      box-shadow: 0 0 20px rgba(231,52,79,0.22);
+      transition: width 0.5s ease;
+    }
+    .agent-copy::-webkit-scrollbar { width: 8px; }
+    .agent-copy::-webkit-scrollbar-track { background: transparent; }
+    .agent-copy::-webkit-scrollbar-thumb {
+      background: rgba(104,100,95,0.28);
+      border-radius: 999px;
+    }
+    .toast { box-shadow: 0 16px 42px rgba(24,23,22,0.24); }
+    .btn:active, .nav a:active, .nav button:active { transform: translateY(0); }
+    :root {
+      --bg: #f4f1ea;
+      --panel: #ffffff;
+      --ink: #151313;
+      --muted: #645f58;
+      --line: #ded4c7;
+      --red: #e7344f;
+      --teal: #007c76;
+      --amber: #b97818;
+      --blue: #2759c7;
+      --shadow: 0 28px 80px rgba(21, 19, 19, 0.14);
+    }
+    .topbar {
+      background: rgba(255,255,255,0.7);
+      border-bottom-color: rgba(228,189,190,0.3);
+      color: var(--ink);
+    }
+    .nav a, .nav button, .nav select {
+      background: rgba(255,255,255,0.72);
+      border-color: var(--line);
+      color: var(--muted);
+    }
+    .nav .primary {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+    }
+    .hero {
+      margin-top: 28px;
+      padding: 26px;
+      border: 1px solid rgba(21,19,19,0.08);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.86), rgba(255,255,255,0.58)),
+        radial-gradient(circle at 14% 20%, rgba(231,52,79,0.10), transparent 28%),
+        radial-gradient(circle at 90% 24%, rgba(0,124,118,0.10), transparent 26%);
+      box-shadow: var(--shadow);
+    }
+    .hero h1 {
+      font-size: clamp(38px, 5.8vw, 70px);
+      line-height: 0.98;
+    }
+    .layout {
+      margin-top: 18px;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 0.78fr);
+      gap: 18px;
+    }
+    .panel {
+      padding: 20px;
+      border-color: rgba(21,19,19,0.10);
+      background: rgba(255,255,255,0.86);
+      box-shadow: var(--shadow);
+    }
+    .panel-head h2 {
+      font-size: 20px;
+    }
+    .copy {
+      min-height: 320px;
+      font-size: 15px;
+      background:
+        linear-gradient(180deg, #fff, #fffdf8);
+      border-color: rgba(21,19,19,0.10);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+    .metrics {
+      gap: 12px;
+    }
+    .metric {
+      min-height: 104px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #151313;
+      color: #fff;
+      border-color: #151313;
+    }
+    .metric span { color: rgba(255,255,255,0.62); }
+    .note, .compare-box, .diff-item, .agent {
+      background: rgba(255,255,255,0.82);
+      border-color: rgba(21,19,19,0.10);
+    }
+    .compare-box.realskill {
+      border-color: rgba(231,52,79,0.28);
+      background: linear-gradient(180deg, #fff, #fff5f6);
+    }
+    .diff-item {
+      min-height: 76px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .agent {
+      min-height: 240px;
+    }
+    .agent.winner {
+      background: linear-gradient(180deg, #fff, #fff5f6);
+      border-color: rgba(231,52,79,0.36);
+    }
+    .chart-panel {
+      position: sticky;
+      top: 84px;
+      gap: 16px;
+    }
+    .share-card {
+      background:
+        linear-gradient(135deg, #151313, #2b2621);
+      color: #fff;
+      border-color: #151313;
+      min-height: 360px;
+    }
+    .share-card::after {
+      background: rgba(231,52,79,0.22);
+    }
+    .share-topic, .share-copy { color: #fff; }
+    .share-copy {
+      border-left-color: #ff536e;
+      color: rgba(255,255,255,0.82);
+    }
+    .share-metric {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.12);
+    }
+    .share-metric span { color: rgba(255,255,255,0.58); }
+    .share-badge {
+      background: #fff;
+      color: var(--ink);
+    }
+    .share-logo {
+      border-color: rgba(255,255,255,0.18);
+    }
+    .radar {
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(21,19,19,0.08);
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .bar-shell {
+      height: 14px;
+      background: rgba(21,19,19,0.08);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #ff3158, #d81f45);
+      color: #fff;
+      box-shadow: 0 16px 34px rgba(231,52,79,0.28);
+    }
+    @media (max-width: 960px) {
+      .chart-panel { position: static; }
+    }
+
+    /* Report UI sync: borrow the provided report layout without replacing the share card logic. */
+    .wrap { width: min(1200px, calc(100% - 48px)); }
+    body {
+      background: #fff8f7;
+      color: #1d1b1b;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 1;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(185, 5, 51, 0.08), transparent 34%),
+        radial-gradient(circle at 92% 18%, rgba(0, 106, 101, 0.08), transparent 32%),
+        linear-gradient(rgba(29, 27, 27, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29, 27, 27, 0.02) 1px, transparent 1px);
+      background-size: auto, auto, 48px 48px, 48px 48px;
+      mask-image: none;
+    }
+    .topbar {
+      background: rgba(255,255,255,0.7);
+      border-bottom: 1px solid rgba(228,189,190,0.3);
+      box-shadow: none;
+    }
+    .topbar-inner { min-height: 80px; }
+    .brand { font-weight: 900; font-size: 24px; letter-spacing: -0.025em; }
+    .nav .primary {
+      background: linear-gradient(135deg, #ff3158, #d81f45);
+      border-color: transparent;
+      box-shadow: 0 14px 28px rgba(185,5,51,0.18), inset 0 1px 0 rgba(255,255,255,0.32);
+    }
+    .report-kicker {
+      display: block;
+      margin-bottom: 10px;
+      color: #b90533;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .hero {
+      margin-top: 0;
+      padding: 48px 0 28px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .hero h1 {
+      max-width: 760px;
+      font-size: clamp(40px, 5vw, 64px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+    }
+    .lead {
+      max-width: 720px;
+      font-size: 18px;
+      line-height: 1.62;
+    }
+    .layout {
+      margin-top: 0;
+      grid-template-columns: minmax(0, 8fr) minmax(340px, 4fr);
+      gap: 32px;
+      padding-bottom: 64px;
+    }
+    .panel, .empty {
+      border-radius: 24px;
+      border-color: #e7e1e0;
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 18px 46px rgba(21,19,19,0.07);
+    }
+    .panel { padding: 32px; }
+    .panel:hover, .share-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(185,5,51,0.18);
+      box-shadow: 0 24px 58px rgba(21,19,19,0.10);
+    }
+    .panel-head { margin-bottom: 24px; }
+    .panel-head h2 {
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+    .btn, .nav a, .nav button, .nav select {
+      border-radius: 8px;
+      min-height: 42px;
+    }
+    .copy {
+      min-height: 250px;
+      padding: 22px;
+      font-size: 15px;
+      line-height: 1.76;
+      border-color: #ded4c7;
+      background: linear-gradient(180deg, #fff, #fffdfa);
+    }
+    .metrics {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .metric {
+      min-height: 104px;
+      padding: 18px;
+      border-radius: 16px;
+      background: #f9f2f1;
+      color: #1d1b1b;
+      border-color: #ded4c7;
+      text-align: center;
+      justify-content: center;
+    }
+    .metric b {
+      color: #b90533;
+      font-size: 30px;
+      line-height: 1;
+    }
+    .metric span {
+      color: #645f58;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .note-grid, .comparison, .diff-list, .agent-grid {
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .note, .compare-box, .diff-item, .agent {
+      border-radius: 16px;
+      border-color: #ded4c7;
+      background: rgba(255,255,255,0.82);
+    }
+    .note { min-height: 128px; padding: 18px; }
+    .compare-box { padding: 20px; min-height: 210px; }
+    .compare-box.realskill {
+      border-color: rgba(185,5,51,0.22);
+      background: linear-gradient(180deg, #fff, #fff7f8);
+    }
+    .diff-item {
+      min-height: 84px;
+      padding: 14px;
+      background: #fff;
+    }
+    .agent {
+      min-height: 260px;
+      padding: 18px;
+      cursor: default;
+    }
+    .agent.winner {
+      border-color: rgba(185,5,51,0.32);
+      background: linear-gradient(180deg, #fff, #fff7f8);
+      box-shadow: 0 0 0 4px rgba(185,5,51,0.06);
+    }
+    .chart-panel {
+      top: 104px;
+      align-self: start;
+      gap: 24px;
+    }
+    .chart-panel > h2 {
+      margin: 4px 0 0;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+    .radar {
+      width: min(320px, 100%);
+      padding: 14px;
+      background: rgba(255,255,255,0.74);
+      border-color: rgba(21,19,19,0.08);
+    }
+    .score-row { gap: 10px; }
+    .bar-shell { height: 10px; background: #f3ecec; }
+    .share-card {
+      border-radius: 24px;
+      min-height: 360px;
+    }
+    .hero, .panel, .share-card, .layout aside {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    @media (max-width: 960px) {
+      .wrap { width: min(100% - 32px, 1200px); }
+      .hero { padding: 32px 0 20px; }
+      .layout { gap: 20px; }
+      .panel { padding: 22px; }
+      .chart-panel { position: static; }
+    }
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 24px, 1200px); }
+      .topbar-inner {
+        width: min(100% - 16px, 1200px);
+        min-height: 64px;
+      }
+      .brand { gap: 8px; font-size: 18px; line-height: 1; }
+      .brand-logo {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+      }
+      .brand span:last-child { display: inline; }
+      .nav a { display: none; }
+      .nav { gap: 6px; }
+      .nav select {
+        width: 86px;
+        min-height: 38px;
+        padding: 7px 8px;
+        font-size: 12px;
+      }
+      .nav button {
+        min-height: 38px;
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+      .hero h1 { font-size: 38px; }
+      .metrics, .note-grid, .comparison, .diff-list, .share-metrics { grid-template-columns: 1fr; }
+      .panel { padding: 18px; border-radius: 16px; }
+      .share-card { border-radius: 16px; }
+      .agent-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="/">
+        <img class="brand-logo" src="/static/assets/realskill-logo.jpg" alt="RealSkill logo">
+        <span>RealSkill</span>
+      </a>
+      <nav class="nav">
+        <select id="langSelect" aria-label="Language">
+          <option value="en">English</option>
+          <option value="zh">简中</option>
+          <option value="zhHant">繁中</option>
+          <option value="ja">日本語</option>
+          <option value="ko">한국어</option>
+          <option value="ms">Malay</option>
+          <option value="fr">Français</option>
+        </select>
+        <a href="/app" data-i18n="back">Back to studio</a>
+        <button class="primary" id="copyBtn" type="button" data-i18n="copy">Copy final</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="reportRoot" hidden>
+    <section class="hero">
+      <div>
+        <span class="report-kicker">Performance assessment</span>
+        <h1 data-i18n="title">Generation report</h1>
+        <p class="lead" id="summary">Final copy, judge notes, agent drafts, and scoring analysis.</p>
+      </div>
+      <button class="btn btn-ghost" id="exportBtn" type="button" data-i18n="export">Export report card</button>
+    </section>
+
+    <section class="layout">
+      <div>
+        <section class="panel">
+          <div class="panel-head">
+            <h2 data-i18n="finalCopy">Final copy</h2>
+            <a class="btn btn-ghost" href="/app" data-i18n="generateAgain">Generate again</a>
+          </div>
+          <div class="copy" id="finalOutput"></div>
+          <div class="metrics">
+            <div class="metric"><b id="winnerMetric">-</b><span data-i18n="winner">winner agent</span></div>
+            <div class="metric"><b id="riskMetric">-</b><span data-i18n="risk">AI-pattern risk</span></div>
+            <div class="metric"><b id="scoreMetric">-</b><span data-i18n="audit">human-like audit</span></div>
+          </div>
+          <div class="note-grid">
+            <div class="note"><b data-i18n="why">Why this works</b><p id="judgeReason"></p></div>
+            <div class="note"><b data-i18n="merge">Merge strategy</b><p id="mergeStrategy"></p></div>
+            <div class="note"><b data-i18n="fit">Platform-fit notes</b><p id="platformNotes"></p></div>
+          </div>
+        </section>
+
+        <section class="panel" style="margin-top:16px;">
+          <div class="panel-head">
+            <h2 data-i18n="compareTitle">Why it is better than generic AI</h2>
+          </div>
+          <div class="comparison">
+            <div class="compare-box">
+              <b data-i18n="genericTitle">Generic AI output</b>
+              <p id="genericOutput"></p>
+            </div>
+            <div class="compare-box realskill">
+              <b data-i18n="realSkillTitle">RealSkill output</b>
+              <p id="realSkillOutput"></p>
+            </div>
+          </div>
+          <div class="diff-list">
+            <div class="diff-item" data-i18n="diff1">More lived-in details</div>
+            <div class="diff-item" data-i18n="diff2">Better platform rhythm</div>
+            <div class="diff-item" data-i18n="diff3">Lower AI-pattern risk</div>
+            <div class="diff-item" data-i18n="diff4">Clearer user value</div>
+          </div>
+        </section>
+
+        <section class="panel" style="margin-top:16px;">
+          <div class="panel-head">
+            <h2 data-i18n="drafts">Agent drafts</h2>
+          </div>
+          <div class="agent-grid" id="agentGrid"></div>
+        </section>
+      </div>
+
+      <aside class="panel chart-panel">
+        <section class="share-card" aria-label="Share card">
+          <div class="share-top">
+            <div class="share-brand">
+              <img class="share-logo" src="/static/assets/realskill-logo.jpg" alt="RealSkill logo">
+              <span>RealSkill</span>
+            </div>
+            <span class="share-badge" data-i18n="shareBadge">Agent report</span>
+          </div>
+          <h2 class="share-topic" id="shareTopic">Generated topic</h2>
+          <div class="share-metrics">
+            <div class="share-metric"><b id="shareWinner">-</b><span data-i18n="shareWinnerLabel">Winner Agent</span></div>
+            <div class="share-metric"><b id="shareScore">-</b><span data-i18n="shareScoreLabel">Human-like score</span></div>
+            <div class="share-metric"><b id="shareRisk">-</b><span data-i18n="shareRiskLabel">AI-pattern risk</span></div>
+          </div>
+          <p class="share-copy" id="shareCopy"></p>
+        </section>
+        <h2 data-i18n="analysis">Analysis charts</h2>
+        <svg class="radar" viewBox="0 0 240 240" role="img" aria-label="Winner score radar">
+          <polygon points="120,18 208,69 208,171 120,222 32,171 32,69" fill="#fff" stroke="#e7ded2"/>
+          <polygon points="120,54 177,87 177,153 120,186 63,153 63,87" fill="none" stroke="#e7ded2"/>
+          <polygon points="120,90 146,105 146,135 120,150 94,135 94,105" fill="none" stroke="#e7ded2"/>
+          <line x1="120" y1="120" x2="120" y2="18" stroke="#e7ded2"/>
+          <line x1="120" y1="120" x2="208" y2="69" stroke="#e7ded2"/>
+          <line x1="120" y1="120" x2="208" y2="171" stroke="#e7ded2"/>
+          <line x1="120" y1="120" x2="120" y2="222" stroke="#e7ded2"/>
+          <line x1="120" y1="120" x2="32" y2="171" stroke="#e7ded2"/>
+          <line x1="120" y1="120" x2="32" y2="69" stroke="#e7ded2"/>
+          <polygon id="radarPoly" points="120,120 120,120 120,120 120,120 120,120 120,120" fill="rgba(231,52,79,0.18)" stroke="#e7344f" stroke-width="3"/>
+          <text x="120" y="12" text-anchor="middle" font-size="11" fill="#68645f">Human</text>
+          <text x="218" y="66" font-size="11" fill="#68645f">Fit</text>
+          <text x="218" y="176" font-size="11" fill="#68645f">Spread</text>
+          <text x="120" y="238" text-anchor="middle" font-size="11" fill="#68645f">Clarity</text>
+          <text x="18" y="176" font-size="11" fill="#68645f">Original</text>
+          <text x="10" y="66" font-size="11" fill="#68645f">Action</text>
+        </svg>
+        <div class="score-row">
+          <div class="score-label"><span data-i18n="barHuman">Human tone</span><span id="humanScore">0</span></div>
+          <div class="bar-shell"><div class="bar" id="humanBar"></div></div>
+        </div>
+        <div class="score-row">
+          <div class="score-label"><span data-i18n="barFit">Platform fit</span><span id="fitScore">0</span></div>
+          <div class="bar-shell"><div class="bar" id="fitBar"></div></div>
+        </div>
+        <div class="score-row">
+          <div class="score-label"><span data-i18n="barSpread">Spread potential</span><span id="spreadScore">0</span></div>
+          <div class="bar-shell"><div class="bar" id="spreadBar"></div></div>
+        </div>
+        <div class="note">
+          <b data-i18n="chartNoteTitle">How to read it</b>
+          <p data-i18n="chartNote">The chart emphasizes user-facing qualities: human tone, platform fit, spread potential, clarity, originality, and actionability.</p>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <section class="empty wrap" id="emptyState" hidden>
+    <h1 data-i18n="emptyTitle">No report yet</h1>
+    <p data-i18n="emptyText">Run a generation from the studio first. The report will open here automatically after the agent panel finishes.</p>
+    <a class="btn btn-primary" href="/app" data-i18n="openStudio">Open studio</a>
+  </section>
+
+  <div class="toast" id="toast">Copied</div>
+
+  <script>
+    const baseText = {};
+    document.querySelectorAll("[data-i18n]").forEach((node) => { baseText[node.dataset.i18n] = node.textContent; });
+    const translations = {
+      en: {},
+      zh: {
+        back: "返回工作台", copy: "复制最终文案", title: "生成报告", export: "导出报告卡", finalCopy: "最终文案", generateAgain: "再次生成",
+        winner: "胜出 Agent", risk: "AI 痕迹风险", audit: "真人感审计", why: "为什么有效", merge: "融合策略", fit: "平台适配说明",
+        compareTitle: "为什么比普通 AI 更好", genericTitle: "普通 AI 输出", realSkillTitle: "RealSkill 输出", diff1: "更有真实生活细节", diff2: "更符合平台节奏", diff3: "更低 AI 痕迹风险", diff4: "用户价值更清晰",
+        shareBadge: "Agent 报告", shareWinnerLabel: "胜出 Agent", shareScoreLabel: "真人感评分", shareRiskLabel: "AI 痕迹风险",
+        drafts: "Agent 草稿", analysis: "分析图表", barHuman: "真人感", barFit: "平台适配", barSpread: "传播潜力", chartNoteTitle: "怎么看图表",
+        chartNote: "图表强调用户真正关心的质量：真人感、平台适配、传播潜力、清晰度、原创度和行动性。",
+        emptyTitle: "还没有报告", emptyText: "请先从工作台运行一次生成。Agent 面板完成后会自动打开这里。", openStudio: "打开工作台"
+      }
+    };
+    translations.zhHant = { ...translations.zh, back: "返回工作台", copy: "複製最終文案", title: "生成報告", export: "匯出報告卡", finalCopy: "最終文案", openStudio: "打開工作台" };
+    translations.ja = { ...translations.en, back: "Studio に戻る", copy: "最終コピーをコピー", title: "生成レポート", export: "レポートを書き出す", generateAgain: "もう一度生成", compareTitle: "通常のAI出力との違い", shareBadge: "Agent レポート" };
+    translations.ko = { ...translations.en, back: "스튜디오로 돌아가기", copy: "최종 문안 복사", title: "생성 리포트", export: "리포트 내보내기", generateAgain: "다시 생성", compareTitle: "일반 AI 출력보다 나은 이유", shareBadge: "Agent 리포트" };
+    translations.ms = { ...translations.en, back: "Kembali ke studio", copy: "Salin akhir", title: "Laporan jana", export: "Eksport laporan", generateAgain: "Jana semula", compareTitle: "Mengapa ia lebih baik daripada AI biasa", shareBadge: "Laporan agent" };
+    translations.fr = { ...translations.en, back: "Retour au studio", copy: "Copier le final", title: "Rapport", export: "Exporter le rapport", generateAgain: "Generer encore", compareTitle: "Pourquoi c'est mieux qu'une IA generique", shareBadge: "Rapport agent" };
+
+    const langSelect = document.getElementById("langSelect");
+    const currentLang = translations[localStorage.getItem("realskill_lang")] ? localStorage.getItem("realskill_lang") : "en";
+    function applyLang(lang) {
+      const dict = translations[lang] || {};
+      document.documentElement.lang = lang;
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        const key = node.dataset.i18n;
+        node.textContent = dict[key] || baseText[key] || "";
+      });
+      localStorage.setItem("realskill_lang", lang);
+    }
+    langSelect.value = currentLang;
+    langSelect.addEventListener("change", () => applyLang(langSelect.value));
+    applyLang(currentLang);
+
+    const reportRoot = document.getElementById("reportRoot");
+    const emptyState = document.getElementById("emptyState");
+    const toast = document.getElementById("toast");
+    const report = loadReport();
+
+    function loadReport() {
+      const raw = sessionStorage.getItem("realskill_report") || localStorage.getItem("realskill_last_report");
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch { return null; }
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function compactText(text, max = 150) {
+      const clean = String(text || "").replace(/\s+/g, " ").trim();
+      return clean.length > max ? `${clean.slice(0, max - 1)}...` : clean;
+    }
+
+    function cleanPublishText(text) {
+      return String(text || "")
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .replace(/```([\s\S]*?)```/g, "$1")
+        .replace(/`([^`\n]+)`/g, "$1")
+        .replace(/(\*\*|__)(.*?)\1/g, "$2")
+        .replace(/(\*|_)([^*_]+)\1/g, "$2")
+        .replace(/^\s{0,3}#{1,6}\s*/gm, "")
+        .replace(/^\s{0,3}>\s?/gm, "")
+        .split("\n")
+        .map((line) => line.trim().replace(/^[-*+]\s+/, "").replace(/^\d+[\.)]\s+/, "").replace(/\s{2,}/g, " "))
+        .join("\n")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+    }
+
+    function genericAiOutput(data) {
+      const topic = data.request?.topic || "this topic";
+      const platform = data.platform || data.request?.platform || "social media";
+      return [
+        `Here is a useful post about ${topic}.`,
+        `You can try these tips and choose the option that works best for you.`,
+        `This is suitable for ${platform} users who want a simple and practical recommendation.`
+      ].join("\n");
+    }
+
+    function renderComparison(data) {
+      document.getElementById("genericOutput").textContent = genericAiOutput(data);
+      document.getElementById("realSkillOutput").textContent = compactText(cleanPublishText(data.result), 360);
+    }
+
+    function renderShareCard(data) {
+      const topic = data.request?.topic || "Generated topic";
+      document.getElementById("shareTopic").textContent = topic;
+      document.getElementById("shareWinner").textContent = data.winner_agent ? `Agent ${data.winner_agent}` : "-";
+      document.getElementById("shareScore").textContent = data.ai_score ? `${data.ai_score}/10` : "-";
+      document.getElementById("shareRisk").textContent = data.ai_detection_risk || "-";
+      document.getElementById("shareCopy").textContent = compactText(cleanPublishText(data.result), 190);
+    }
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1600);
+    }
+
+    function normalizeScore(value) {
+      const num = Number(value);
+      if (!Number.isFinite(num)) return 7;
+      return Math.max(0, Math.min(10, num));
+    }
+
+    function winnerScoreArray(data) {
+      const scores = data.scores || {};
+      const winner = data.winner_agent || "B";
+      const picked = scores[winner] || scores[winner.toLowerCase()] || [];
+      return [
+        normalizeScore(picked[0] ?? data.ai_score ?? 7),
+        normalizeScore(picked[1] ?? 7),
+        normalizeScore(picked[2] ?? 7),
+      ];
+    }
+
+    function setBar(id, scoreId, value) {
+      document.getElementById(id).style.width = `${value * 10}%`;
+      document.getElementById(scoreId).textContent = value.toFixed(1);
+    }
+
+    function drawRadar(values) {
+      const expanded = [
+        values[0],
+        values[1],
+        values[2],
+        normalizeScore(report.ai_score || 7),
+        normalizeScore((values[0] + values[2]) / 2),
+        normalizeScore((values[1] + values[2]) / 2)
+      ];
+      const center = { x: 120, y: 120 };
+      const radius = 102;
+      const points = expanded.map((value, index) => {
+        const angle = (-90 + index * 60) * Math.PI / 180;
+        const r = radius * (value / 10);
+        return `${(center.x + Math.cos(angle) * r).toFixed(1)},${(center.y + Math.sin(angle) * r).toFixed(1)}`;
+      }).join(" ");
+      document.getElementById("radarPoly").setAttribute("points", points);
+    }
+
+    function renderAgents(data) {
+      const labels = { A: "Viral curator", B: "Real-life sharer", C: "Rational author" };
+      const variants = data.all_variants || {};
+      const scores = data.scores || {};
+      const strengths = data.strengths || {};
+      const winner = data.winner_agent || "B";
+      document.getElementById("agentGrid").innerHTML = ["A", "B", "C"].map((key) => {
+        const isWinner = key === winner;
+        const score = Array.isArray(scores[key]) ? scores[key].join(" / ") : "not scored";
+        return `<article class="agent ${isWinner ? "winner" : ""}">
+          <div class="agent-head"><span>Agent ${key}${isWinner ? " wins" : ""}</span><span>${labels[key]} | ${score}</span></div>
+          <p class="strength">${escapeHtml(strengths[key] || labels[key])}</p>
+          <p class="agent-copy">${escapeHtml(cleanPublishText(variants[key]) || "No draft returned.")}</p>
+        </article>`;
+      }).join("");
+    }
+
+    function platformNote(data, values) {
+      return `Platform: ${data.platform || "-"} | Human tone ${values[0].toFixed(1)}, platform fit ${values[1].toFixed(1)}, spread potential ${values[2].toFixed(1)}. Humanize mode: ${data.humanize_mode || "rules"}.`;
+    }
+
+    function buildReportCard(data) {
+      return [
+        "RealSkill Generation Report",
+        "",
+        `Topic: ${data.request?.topic || "-"}`,
+        `Platform: ${data.platform || data.request?.platform || "-"}`,
+        `Winner: Agent ${data.winner_agent || "-"}`,
+        `AI-pattern risk: ${data.ai_detection_risk || "-"}`,
+        `Human-like audit: ${data.ai_score || "-"}/10`,
+        "",
+        "Final copy:",
+        cleanPublishText(data.result),
+        "",
+        "Generic AI output:",
+        genericAiOutput(data),
+        "",
+        "Why this works:",
+        data.judge_reason || "",
+        "",
+        "Merge strategy:",
+        data.merge_strategy || "",
+      ].join("\n");
+    }
+
+    if (!report) {
+      emptyState.hidden = false;
+    } else {
+      reportRoot.hidden = false;
+      const values = winnerScoreArray(report);
+      document.getElementById("summary").textContent = `${report.request?.topic || "Generated topic"} | ${report.platform || report.request?.platform || "-"}`;
+      report.result = cleanPublishText(report.result);
+      if (report.all_variants) {
+        Object.keys(report.all_variants).forEach((key) => {
+          report.all_variants[key] = cleanPublishText(report.all_variants[key]);
+        });
+      }
+      document.getElementById("finalOutput").textContent = report.result || "No result returned.";
+      document.getElementById("winnerMetric").textContent = report.winner_agent || "-";
+      document.getElementById("riskMetric").textContent = report.ai_detection_risk || "-";
+      document.getElementById("scoreMetric").textContent = report.ai_score ? `${report.ai_score}/10` : "-";
+      document.getElementById("judgeReason").textContent = report.judge_reason || "The judge selected the strongest balanced draft for this topic.";
+      document.getElementById("mergeStrategy").textContent = report.merge_strategy || "Use the winner as the base and borrow useful traits from the other drafts.";
+      document.getElementById("platformNotes").textContent = platformNote(report, values);
+      setBar("humanBar", "humanScore", values[0]);
+      setBar("fitBar", "fitScore", values[1]);
+      setBar("spreadBar", "spreadScore", values[2]);
+      drawRadar(values);
+      renderComparison(report);
+      renderShareCard(report);
+      renderAgents(report);
+    }
+
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      if (!report) return;
+      await navigator.clipboard.writeText(cleanPublishText(report.result));
+      showToast("Copied final copy");
+    });
+    document.getElementById("exportBtn").addEventListener("click", () => {
+      if (!report) return;
+      const blob = new Blob([buildReportCard(report)], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "realskill-report-card.txt";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      showToast("Report exported");
+    });
+  </script>
+</body>
+</html>

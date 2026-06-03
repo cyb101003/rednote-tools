@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RealSkill Studio</title>
+  <meta name="description" content="Generate platform-native social copy through a multi-agent writing workflow.">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#b90533",
+            "primary-hot": "#ff3158",
+            surface: "#fff8f7",
+            "surface-low": "#f9f2f1",
+            "surface-mid": "#f3ecec",
+            "surface-high": "#e7e1e0",
+            ink: "#1d1b1b",
+            muted: "#645f58",
+            outline: "#e4bdbe",
+            teal: "#006a65",
+            blue: "#2759c7",
+            amber: "#b97818"
+          },
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif", "system-ui"]
+          },
+          borderRadius: {
+            DEFAULT: "0.5rem",
+            lg: "0.5rem",
+            xl: "0.75rem"
+          },
+          boxShadow: {
+            floating: "0 28px 80px rgba(21, 19, 19, 0.12)",
+            soft: "0 18px 42px rgba(21, 19, 19, 0.08)"
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: #fff8f7;
+      color: #1d1b1b;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(185, 5, 51, 0.08), transparent 34%),
+        radial-gradient(circle at 92% 18%, rgba(0, 106, 101, 0.08), transparent 32%),
+        linear-gradient(rgba(29, 27, 27, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29, 27, 27, 0.02) 1px, transparent 1px);
+      background-size: auto, auto, 48px 48px, 48px 48px;
+    }
+    .wrap { width: min(1200px, calc(100% - 48px)); margin: 0 auto; }
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #fff;
+      box-shadow: 0 12px 26px rgba(185, 5, 51, 0.2);
+    }
+    #langSelect {
+      width: auto !important;
+      max-width: none !important;
+      min-height: 42px;
+      border: 1px solid #ded4c7 !important;
+      border-radius: 8px !important;
+      background: rgba(255, 255, 255, 0.72) !important;
+      color: #645f58 !important;
+      padding: 9px 12px !important;
+      font-size: 13px !important;
+      font-weight: 800 !important;
+      line-height: 1.2 !important;
+      cursor: pointer;
+      white-space: nowrap;
+      appearance: auto !important;
+      -webkit-appearance: auto !important;
+      background-image: none !important;
+      box-shadow: none !important;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+    }
+    #langSelect:hover {
+      transform: translateY(-1px);
+      border-color: rgba(24, 23, 22, 0.2) !important;
+      box-shadow: 0 10px 24px rgba(24, 23, 22, 0.08) !important;
+      color: #151313 !important;
+    }
+    .primary-gradient {
+      background: linear-gradient(135deg, #ff3158, #d81f45);
+      box-shadow: 0 18px 34px rgba(185, 5, 51, 0.26), inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+    .runtime-gradient {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(185, 5, 51, 0.13), transparent 38%),
+        radial-gradient(circle at 100% 100%, rgba(0, 106, 101, 0.12), transparent 36%),
+        #ffffff;
+    }
+    .studio-card {
+      border: 1px solid rgba(143,111,112,0.28);
+      border-radius: 0.5rem !important;
+      background: rgba(255,255,255,0.86);
+      box-shadow: 0 28px 80px rgba(21,19,19,0.12);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+    .studio-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(143,111,112,0.58);
+      box-shadow: 0 32px 86px rgba(21,19,19,0.14);
+    }
+    .field-label {
+      color: #645f58;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    input, textarea, select {
+      border-radius: 0.5rem !important;
+      border-color: rgba(143,111,112,0.34) !important;
+      background: #fff !important;
+      color: #1d1b1b !important;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: #b90533 !important;
+      box-shadow: 0 0 0 3px rgba(185, 5, 51, 0.12) !important;
+    }
+    .platform-option.active {
+      background: #1d1b1b;
+      border-color: #1d1b1b;
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(21,19,19,0.18);
+    }
+    .platform-option.active span { color: rgba(255,255,255,0.62); }
+    .platform-option:hover {
+      border-color: rgba(185,5,51,0.55);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(21,19,19,0.06);
+    }
+    .platform-option.active:hover {
+      border-color: #1d1b1b;
+      box-shadow: 0 16px 30px rgba(21,19,19,0.2);
+    }
+    .setup-card { display: none; }
+    .setup-card.show { display: block; }
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      padding: 16px;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(185,5,51,0.28), transparent 32%),
+        radial-gradient(circle at 82% 78%, rgba(0,106,101,0.24), transparent 32%),
+        rgba(29,27,27,0.56);
+      backdrop-filter: blur(18px);
+    }
+    .loading-overlay.show { display: flex; }
+    .stage { counter-increment: stage; }
+    .stage::before {
+      content: counter(stage, decimal-leading-zero);
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: #f3ecec;
+      color: #645f58;
+      font-size: 11px;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+    .stage.active {
+      border-color: rgba(39, 89, 199, 0.38);
+      background: #f6f8ff;
+    }
+    .stage.active::before { background: #2759c7; color: #fff; }
+    .stage.done::before { background: #006a65; color: #fff; }
+    .progress-bar { position: relative; overflow: hidden; }
+    .progress-bar::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.62), transparent);
+      animation: shimmer 1.15s linear infinite;
+    }
+    @keyframes shimmer {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(100%); }
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      z-index: 90;
+      transform: translateX(-50%) translateY(80px);
+      opacity: 0;
+      transition: all 0.2s ease;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 24px, 1200px); }
+      header .wrap {
+        width: min(100% - 16px, 1200px);
+        height: 64px !important;
+      }
+      header .brand-logo {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+      }
+      header a[href="/"] {
+        gap: 8px !important;
+        font-size: 18px !important;
+        line-height: 1 !important;
+      }
+      header nav { gap: 6px !important; }
+      header nav a[href="/docs"] { display: none; }
+      body { padding-bottom: 74px; }
+      #langSelect {
+        width: 86px !important;
+        max-width: 86px !important;
+        min-height: 38px;
+        padding: 7px 8px !important;
+        font-size: 12px !important;
+      }
+      .mobile-submit { display: block; }
+      .loading-overlay {
+        align-items: flex-start;
+        padding: 8px;
+        overflow-y: auto;
+      }
+      .agent-run {
+        grid-template-columns: 1fr !important;
+        max-width: calc(100vw - 16px);
+        max-height: none;
+        overflow: visible;
+      }
+      .agent-run > div:first-child {
+        padding: 16px;
+        gap: 12px;
+      }
+      .agent-run h2 { font-size: 30px; }
+      .agent-run .timer { margin-top: 14px; }
+      .agent-run .stage {
+        min-height: 48px !important;
+        padding: 12px !important;
+      }
+      .agent-run .stage span { display: none; }
+      .stage::before {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="sticky top-0 z-50 glass border-b border-outline/40">
+    <div class="wrap h-20 flex items-center justify-between gap-4">
+      <a class="flex items-center gap-3 font-black text-2xl tracking-tight" href="/">
+        <img class="brand-logo" src="/static/assets/realskill-logo.jpg" alt="RealSkill logo">
+        <span>RealSkill</span>
+      </a>
+      <nav class="flex items-center gap-3 md:gap-6">
+        <select id="langSelect" aria-label="Language" class="block max-w-[112px] md:max-w-none bg-surface-low border-outline rounded-lg text-sm font-semibold px-2 md:px-3 py-1.5">
+          <option value="en">English</option>
+          <option value="zh">简中</option>
+          <option value="zhHant">繁中</option>
+          <option value="ja">日本語</option>
+          <option value="ko">한국어</option>
+          <option value="ms">Malay</option>
+          <option value="fr">Français</option>
+        </select>
+        <button class="hidden sm:inline-flex text-sm font-bold text-muted hover:text-ink transition-colors" id="navGenerate" type="button">Generate</button>
+        <a class="hidden sm:inline-flex text-sm font-bold text-muted hover:text-ink transition-colors" href="/.well-known/skill.json" target="_blank" rel="noreferrer">Skill JSON</a>
+        <a class="bg-ink text-white py-2.5 px-5 rounded-lg font-bold text-sm hover:scale-[1.02] active:scale-95 transition-all" href="/docs" target="_blank" rel="noreferrer">API Docs</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="py-12 lg:py-20 grid lg:grid-cols-12 gap-10 items-start">
+      <div class="lg:col-span-7 space-y-8">
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1 rounded-full bg-surface-high text-[11px] font-black uppercase tracking-wider text-muted border border-outline/40">Creator workflow</span>
+          <span class="px-3 py-1 rounded-full bg-surface-high text-[11px] font-black uppercase tracking-wider text-muted border border-outline/40">Web studio</span>
+          <span class="px-3 py-1 rounded-full bg-surface-high text-[11px] font-black uppercase tracking-wider text-muted border border-outline/40">Local agent skill</span>
+        </div>
+        <div class="space-y-5">
+          <h1 class="text-5xl md:text-7xl lg:text-8xl font-black leading-[1.04] tracking-tight">
+            Generate platform-native copy with an agent panel.
+          </h1>
+          <p class="text-lg md:text-xl text-muted leading-relaxed max-w-2xl font-medium">
+            RealSkill turns a rough idea and optional creator references into posts for Xiaohongshu, X, LinkedIn, Instagram, TikTok, Zhihu, or Weibo through retrieval, multi-agent drafting, judge selection, and audit-ready reporting.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-4">
+          <button class="primary-gradient text-white px-8 py-4 rounded-lg font-bold text-lg hover:brightness-110 active:scale-95 transition-all" id="heroGenerate" type="button">Start generation</button>
+          <a class="bg-white border border-outline px-8 py-4 rounded-lg font-bold text-lg hover:bg-surface-low transition-all" href="/.well-known/skill.json" target="_blank" rel="noreferrer">View schema</a>
+        </div>
+
+        <div class="hidden lg:grid sm:grid-cols-3 gap-2 bg-surface-low p-1 rounded-lg border border-outline/40">
+          <div class="bg-white p-5 rounded-xl">
+            <span class="text-4xl font-black">3</span>
+            <p class="text-[10px] font-black uppercase tracking-widest text-muted mt-1">Writing agents</p>
+          </div>
+          <div class="bg-white p-5 rounded-xl">
+            <span class="text-4xl font-black">RAG</span>
+            <p class="text-[10px] font-black uppercase tracking-widest text-muted mt-1">Trend memory</p>
+          </div>
+          <div class="bg-white p-5 rounded-xl">
+            <span class="text-4xl font-black">API</span>
+            <p class="text-[10px] font-black uppercase tracking-widest text-muted mt-1">Agent skill</p>
+          </div>
+        </div>
+
+        <div class="hidden lg:block runtime-gradient studio-card rounded-2xl p-5">
+          <div class="flex items-center justify-between gap-4 mb-4">
+            <h2 class="text-sm font-black uppercase tracking-widest">Agent pipeline</h2>
+            <span class="px-2 py-1 rounded-md bg-blue/10 text-blue text-[10px] font-black uppercase tracking-widest">Runtime preview</span>
+          </div>
+          <div class="grid sm:grid-cols-4 gap-3">
+            <div class="bg-ink text-white rounded-xl p-4">
+              <span class="w-9 h-9 rounded-lg bg-primary-hot flex items-center justify-center font-black mb-4">A</span>
+              <b>Hook</b>
+              <p class="text-xs text-white/60 mt-1">Viral opening and rhythm.</p>
+            </div>
+            <div class="bg-ink text-white rounded-xl p-4">
+              <span class="w-9 h-9 rounded-lg bg-primary-hot flex items-center justify-center font-black mb-4">B</span>
+              <b>Human</b>
+              <p class="text-xs text-white/60 mt-1">Lived-in creator voice.</p>
+            </div>
+            <div class="bg-ink text-white rounded-xl p-4">
+              <span class="w-9 h-9 rounded-lg bg-primary-hot flex items-center justify-center font-black mb-4">C</span>
+              <b>Value</b>
+              <p class="text-xs text-white/60 mt-1">Structure and usefulness.</p>
+            </div>
+            <div class="bg-ink text-white rounded-xl p-4">
+              <span class="w-9 h-9 rounded-lg bg-primary-hot flex items-center justify-center font-black mb-4">J</span>
+              <b>Judge</b>
+              <p class="text-xs text-white/60 mt-1">Selects winning direction.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="lg:col-span-5 studio-card rounded-2xl overflow-hidden sticky top-24" id="studio">
+        <div class="bg-ink text-white p-6 flex items-start justify-between gap-4">
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-[0.18em] text-white/50">Live studio</span>
+            <h2 class="text-2xl font-black mt-1">Generation studio</h2>
+          </div>
+          <span class="px-3 py-1.5 rounded-full bg-amber/15 text-amber text-xs font-black" id="apiStatus">Checking</span>
+        </div>
+        <div class="setup-card m-6 rounded-xl border border-primary/25 bg-red-50 p-4 text-sm text-red-900" id="setupCard">
+          <b class="block mb-1">Generation is not configured on this server yet.</b>
+          Add <code>OPENAI_API_KEY</code> to <code>.env</code> and restart uvicorn.
+        </div>
+        <form class="p-6 space-y-5" id="generateForm">
+          <div class="space-y-2">
+            <label class="field-label" for="topic">Topic</label>
+            <input class="w-full px-4 py-3" id="topic" name="topic" placeholder="Example: Singapore campus weekend food guide" maxlength="160" required>
+          </div>
+
+          <div class="space-y-2">
+            <label class="field-label" for="platform">Platform</label>
+            <select class="sr-only" id="platform" name="platform" aria-label="Selected platform">
+              <option value="xiaohongshu">Xiaohongshu</option>
+              <option value="x">X / Twitter</option>
+              <option value="linkedin">LinkedIn</option>
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+              <option value="zhihu">Zhihu</option>
+              <option value="weibo">Weibo</option>
+            </select>
+            <div class="grid grid-cols-2 gap-2" id="platformPicker" role="radiogroup" aria-label="Platform">
+              <button class="platform-option active min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="xiaohongshu" role="radio" aria-checked="true">Xiaohongshu <span class="text-xs text-muted">CN</span></button>
+              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="x" role="radio" aria-checked="false">X / Twitter <span class="text-xs text-muted">EN</span></button>
+              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="linkedin" role="radio" aria-checked="false">LinkedIn <span class="text-xs text-muted">EN</span></button>
+              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="instagram" role="radio" aria-checked="false">Instagram <span class="text-xs text-muted">EN</span></button>
+              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="tiktok" role="radio" aria-checked="false">TikTok <span class="text-xs text-muted">EN</span></button>
+              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="zhihu" role="radio" aria-checked="false">Zhihu <span class="text-xs text-muted">CN</span></button>
+              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="weibo" role="radio" aria-checked="false">Weibo <span class="text-xs text-muted">CN</span></button>
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label class="field-label" for="tone">Demo angle</label>
+              <select class="w-full px-4 py-3" id="tone" name="tone">
+                <option>Campus creator</option>
+                <option>Practical guide</option>
+                <option>Personal diary</option>
+              </select>
+            </div>
+            <div class="space-y-2">
+              <label class="field-label">Output</label>
+              <div class="h-[46px] rounded-lg border border-outline bg-surface-low px-4 flex items-center text-sm font-bold text-muted">Dedicated report page</div>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="field-label" for="refs">Style references, one per line</label>
+            <textarea class="w-full min-h-32 px-4 py-3 resize-y" id="refs" name="refs" placeholder="Paste creator examples. RealSkill extracts cadence and rhythm without copying exact sentences."></textarea>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-3">
+            <button class="primary-gradient text-white px-5 py-3 rounded-lg font-black flex-1 active:scale-95 transition-all" id="submitBtn" type="submit">Generate with agents</button>
+            <button class="bg-white border border-outline px-5 py-3 rounded-lg font-black text-muted hover:text-ink transition-all" type="button" id="sampleBtn">Load sample style</button>
+          </div>
+          <p class="text-xs leading-relaxed text-muted border-t border-outline/40 pt-4">
+            After generation, RealSkill opens a dedicated report page with final copy, agent drafts, and analysis charts.
+          </p>
+        </form>
+      </section>
+    </section>
+
+    <section class="grid md:grid-cols-3 gap-4 pb-16">
+      <article class="studio-card rounded-2xl p-6">
+        <h3 class="font-black text-lg mb-3">Callable by agents</h3>
+        <p class="text-muted leading-relaxed text-sm mb-5">Any tool-aware agent can discover the function schema and call the same production endpoint.</p>
+        <code class="block bg-ink text-white rounded-lg p-3 text-xs overflow-x-auto">GET /.well-known/skill.json</code>
+      </article>
+      <article class="studio-card rounded-2xl p-6">
+        <h3 class="font-black text-lg mb-3">Dedicated report page</h3>
+        <p class="text-muted leading-relaxed text-sm mb-5">The studio stays focused on input, while the result opens as a shareable analysis view.</p>
+        <code class="block bg-ink text-white rounded-lg p-3 text-xs overflow-x-auto">GET /report</code>
+      </article>
+      <article class="studio-card rounded-2xl p-6">
+        <h3 class="font-black text-lg mb-3">Local fallback</h3>
+        <p class="text-muted leading-relaxed text-sm mb-5">The original Streamlit interface remains available for manual checks and screenshots.</p>
+        <code class="block bg-ink text-white rounded-lg p-3 text-xs overflow-x-auto">GET /streamlit</code>
+      </article>
+    </section>
+  </main>
+
+  <div class="mobile-submit hidden fixed inset-x-0 bottom-0 z-50 border-t border-outline bg-white/95 p-3 backdrop-blur">
+    <button class="primary-gradient text-white w-full py-3 rounded-lg font-black" id="mobileSubmit" type="button">Generate with agents</button>
+  </div>
+
+  <div class="loading-overlay" id="loadingOverlay" role="dialog" aria-modal="true" aria-label="Agent run progress">
+    <div class="agent-run w-full max-w-5xl max-h-[calc(100dvh-24px)] overflow-hidden rounded-2xl bg-white shadow-floating grid lg:grid-cols-[300px_1fr]">
+      <div class="bg-ink text-white p-6 flex flex-col justify-between gap-8">
+        <div>
+          <span class="text-[10px] font-black uppercase tracking-[0.18em] text-white/45">multi-agent writing system</span>
+          <h2 class="text-4xl font-black leading-none mt-3">Agent Run</h2>
+          <p class="run-status mt-3 text-white/65 leading-relaxed" id="runStatus">Preparing the generation panel.</p>
+        </div>
+        <div class="timer w-fit rounded-lg border border-white/15 bg-white/10 px-3 py-2 font-black tabular-nums" id="elapsedTimer">00:00</div>
+      </div>
+      <div class="bg-white">
+        <div class="h-3 bg-surface-mid"><div class="progress-bar h-full w-[10%] bg-gradient-to-r from-primary-hot via-amber to-teal transition-all" id="progressBar"></div></div>
+        <div class="p-5 overflow-auto max-h-[calc(100dvh-120px)]">
+          <div class="grid gap-3 [counter-reset:stage]" id="stageList"></div>
+          <div class="agent-chips mt-5 pt-4 border-t border-outline/40 flex flex-wrap gap-2">
+            <span class="chip rounded-full border border-outline bg-white px-3 py-1.5 text-xs font-black text-muted" id="chipA">Agent A</span>
+            <span class="chip rounded-full border border-outline bg-white px-3 py-1.5 text-xs font-black text-muted" id="chipB">Agent B</span>
+            <span class="chip rounded-full border border-outline bg-white px-3 py-1.5 text-xs font-black text-muted" id="chipC">Agent C</span>
+            <span class="chip rounded-full border border-outline bg-white px-3 py-1.5 text-xs font-black text-muted" id="chipJudge">Judge</span>
+            <span class="chip rounded-full border border-outline bg-white px-3 py-1.5 text-xs font-black text-muted" id="chipHumanizer">Humanizer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast rounded-lg bg-ink px-4 py-3 text-sm font-black text-white shadow-floating" id="toast">Copied</div>
+
+  <script>
+    const form = document.getElementById("generateForm");
+    const generatorPanel = document.getElementById("studio");
+    const topicInput = document.getElementById("topic");
+    const refsInput = document.getElementById("refs");
+    const navGenerate = document.getElementById("navGenerate");
+    const heroGenerate = document.getElementById("heroGenerate");
+    const submitBtn = document.getElementById("submitBtn");
+    const mobileSubmit = document.getElementById("mobileSubmit");
+    const sampleBtn = document.getElementById("sampleBtn");
+    const statusEl = document.getElementById("apiStatus");
+    const setupCard = document.getElementById("setupCard");
+    const toast = document.getElementById("toast");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    const progressBar = document.getElementById("progressBar");
+    const stageList = document.getElementById("stageList");
+    const runStatus = document.getElementById("runStatus");
+    const elapsedTimer = document.getElementById("elapsedTimer");
+    const langSelect = document.getElementById("langSelect");
+    const platformSelect = document.getElementById("platform");
+    const platformOptions = Array.from(document.querySelectorAll(".platform-option"));
+
+    let configReady = false;
+    let loadingTimer = null;
+    let elapsedTimerId = null;
+    let loadingStartedAt = 0;
+    let currentUiLang = "en";
+    let currentStageIndex = 0;
+
+    const stages = [
+      { label: "Retrieving viral memory", detail: "Searching local Chroma references and creator-style context.", chip: null },
+      { label: "Agent A drafting viral hook", detail: "A high-energy curator drafts the hook and platform rhythm.", chip: "chipA" },
+      { label: "Agent B rewriting as real-life sharer", detail: "A lived-experience voice adds casual detail and texture.", chip: "chipB" },
+      { label: "Agent C checking rational structure", detail: "A structured author checks clarity and usefulness.", chip: "chipC" },
+      { label: "Judge selecting winner", detail: "The judge scores platform fit, human feel, and viral potential.", chip: "chipJudge" },
+      { label: "Opening report", detail: "Preparing final copy, draft comparison, and analysis charts.", chip: "chipHumanizer" }
+    ];
+
+    const appI18n = {
+      en: {
+        navGenerate: "Generate", apiDocs: "API Docs", badge1: "Creator workflow", badge2: "Web studio", badge3: "Local agent skill", heroTitle: "Generate platform-native copy with an agent panel.",
+        heroLead: "RealSkill turns a rough idea and optional creator references into posts for Xiaohongshu, X, LinkedIn, Instagram, TikTok, Zhihu, or Weibo through retrieval, multi-agent drafting, judge selection, and audit-ready reporting.",
+        heroGenerate: "Start generation", viewSchema: "View schema", liveStudio: "Live studio", studioTitle: "Generation studio",
+        topic: "Topic", topicPlaceholder: "Example: Singapore campus weekend food guide", platform: "Platform", demoAngle: "Demo angle",
+        output: "Output", outputValue: "Dedicated report page", refs: "Style references, one per line",
+        refsPlaceholder: "Paste creator examples. RealSkill extracts cadence and rhythm without copying exact sentences.",
+        submit: "Generate with agents", sample: "Load sample style", formNote: "After generation, RealSkill opens a dedicated report page with final copy, agent drafts, and analysis charts.",
+        callableTitle: "Callable by agents", callableText: "Any tool-aware agent can discover the function schema and call the same production endpoint.",
+        reportTitle: "Dedicated report page", reportText: "The studio stays focused on input, while the result opens as a shareable analysis view.",
+        fallbackTitle: "Local fallback", fallbackText: "The original Streamlit interface remains available for manual checks and screenshots.",
+        runEyebrow: "multi-agent writing system", runTitle: "Agent Run", runPreparing: "Preparing the generation panel.",
+        statusReady: "Ready", statusSetup: "Setup needed", statusUnknown: "Status unknown", statusGenerating: "Generating", statusComplete: "Complete", statusError: "Error",
+        agentRunning: "Agent running...", sampleLoaded: "Sample style loaded",
+        setupTitle: "Generation is not configured on this server yet.", setupBody: "Add OPENAI_API_KEY to .env and restart uvicorn.",
+        stage0Label: "Retrieving viral memory", stage0Detail: "Searching local Chroma references and creator-style context.",
+        stage1Label: "Agent A drafting viral hook", stage1Detail: "A high-energy curator drafts the hook and platform rhythm.",
+        stage2Label: "Agent B rewriting as real-life sharer", stage2Detail: "A lived-experience voice adds casual detail and texture.",
+        stage3Label: "Agent C checking rational structure", stage3Detail: "A structured author checks clarity and usefulness.",
+        stage4Label: "Judge selecting winner", stage4Detail: "The judge scores platform fit, human feel, and viral potential.",
+        stage5Label: "Opening report", stage5Detail: "Preparing final copy, draft comparison, and analysis charts."
+      },
+      zh: {
+        navGenerate: "生成", apiDocs: "API 文档", badge1: "创作者工作流", badge2: "网页工作台", badge3: "本地 Agent Skill", heroTitle: "用 Agent 面板生成平台原生文案。",
+        heroLead: "RealSkill 会把一个粗略想法和可选创作者参考，转成适合小红书、X、LinkedIn、Instagram、TikTok、知乎或微博的内容，并完成检索、多 Agent 草稿、评审选择和报告分析。",
+        heroGenerate: "开始生成", viewSchema: "查看 schema", liveStudio: "实时工作台", studioTitle: "生成工作台",
+        topic: "主题", topicPlaceholder: "例：新加坡校园周末美食路线", platform: "平台", demoAngle: "演示角度",
+        output: "输出", outputValue: "专属报告页", refs: "风格参考，每行一条",
+        refsPlaceholder: "粘贴创作者案例。RealSkill 会提取节奏和语气，但不会复制原句。",
+        submit: "用 Agent 生成", sample: "加载参考风格", formNote: "生成后，RealSkill 会打开专属报告页，展示最终文案、Agent 草稿和分析图表。",
+        callableTitle: "可被 Agent 调用", callableText: "任何支持工具调用的 Agent 都可以发现函数 schema，并调用同一个生产端点。",
+        reportTitle: "专属报告页", reportText: "工作台专注输入，结果会打开成可分享的分析视图。",
+        fallbackTitle: "本地备用入口", fallbackText: "原 Streamlit 界面仍可用于人工检查和截图。",
+        runEyebrow: "多 Agent 写作系统", runTitle: "Agent 运行中", runPreparing: "正在准备生成面板。",
+        statusReady: "已就绪", statusSetup: "需要配置", statusUnknown: "状态未知", statusGenerating: "生成中", statusComplete: "完成", statusError: "错误",
+        agentRunning: "Agent 运行中...", sampleLoaded: "已加载参考风格",
+        setupTitle: "当前服务器还没有配置生成能力。", setupBody: "请在 .env 中添加 OPENAI_API_KEY 并重启 uvicorn。",
+        stage0Label: "检索爆款记忆", stage0Detail: "正在搜索本地 Chroma 参考和创作者风格上下文。",
+        stage1Label: "Agent A 起草爆款开头", stage1Detail: "高能策展型 Agent 正在设计开头和平台节奏。",
+        stage2Label: "Agent B 改写成真人分享", stage2Detail: "生活化 Agent 正在加入真实细节和自然语气。",
+        stage3Label: "Agent C 检查理性结构", stage3Detail: "结构型 Agent 正在检查清晰度和实用性。",
+        stage4Label: "Judge 选择赢家", stage4Detail: "评审正在按平台适配、真人感和传播潜力打分。",
+        stage5Label: "打开报告", stage5Detail: "正在准备最终文案、草稿对比和分析图表。"
+      }
+    };
+    appI18n.zhHant = { ...appI18n.zh, heroTitle: "用 Agent 面板生成平台原生文案。", heroGenerate: "開始生成", submit: "用 Agent 生成", sample: "載入參考風格", statusReady: "已就緒", statusSetup: "需要設定", agentRunning: "Agent 運行中..." };
+    appI18n.ja = { ...appI18n.en, navGenerate: "生成", apiDocs: "API Docs", heroTitle: "Agent パネルで各プラットフォーム向けコピーを生成。", heroGenerate: "生成を開始", viewSchema: "Schemaを見る", studioTitle: "生成スタジオ", topic: "テーマ", platform: "プラットフォーム", refs: "スタイル参考、1行ずつ", submit: "Agentで生成", sample: "参考スタイルを読み込む", statusReady: "準備完了", statusSetup: "設定が必要", statusGenerating: "生成中", agentRunning: "Agent 実行中..." };
+    appI18n.ko = { ...appI18n.en, navGenerate: "생성", heroTitle: "Agent 패널로 플랫폼 네이티브 문안을 생성하세요.", heroGenerate: "생성 시작", studioTitle: "생성 스튜디오", topic: "주제", platform: "플랫폼", refs: "스타일 참고, 한 줄씩", submit: "Agent로 생성", sample: "샘플 스타일 불러오기", statusReady: "준비됨", statusSetup: "설정 필요", statusGenerating: "생성 중", agentRunning: "Agent 실행 중..." };
+    appI18n.ms = { ...appI18n.en, navGenerate: "Jana", heroTitle: "Jana copy native platform dengan panel agent.", heroGenerate: "Mula jana", studioTitle: "Studio jana", topic: "Topik", platform: "Platform", refs: "Rujukan gaya, satu setiap baris", submit: "Jana dengan agent", sample: "Muat gaya contoh", statusReady: "Sedia", statusSetup: "Perlu tetapan", statusGenerating: "Menjana", agentRunning: "Agent berjalan..." };
+    appI18n.fr = { ...appI18n.en, navGenerate: "Generer", heroTitle: "Generez un copy natif pour chaque plateforme avec un panel agent.", heroGenerate: "Lancer", viewSchema: "Voir le schema", studioTitle: "Studio de generation", topic: "Sujet", platform: "Plateforme", refs: "References de style, une par ligne", submit: "Generer avec les agents", sample: "Charger un style exemple", statusReady: "Pret", statusSetup: "Configuration requise", statusGenerating: "Generation", agentRunning: "Agents en cours..." };
+
+    function t(key) {
+      return appI18n[currentUiLang]?.[key] || appI18n.en[key] || key;
+    }
+
+    function setText(selector, key) {
+      const node = document.querySelector(selector);
+      if (node) node.textContent = t(key);
+    }
+
+    function refreshStagesText() {
+      stages.forEach((stage, index) => {
+        stage.label = t(`stage${index}Label`);
+        stage.detail = t(`stage${index}Detail`);
+      });
+    }
+
+    function applyAppLanguage(lang) {
+      currentUiLang = appI18n[lang] ? lang : "en";
+      document.documentElement.lang = currentUiLang;
+      langSelect.value = currentUiLang;
+      localStorage.setItem("realskill_lang", currentUiLang);
+
+      setText("#navGenerate", "navGenerate");
+      setText('a[href="/docs"]', "apiDocs");
+      setText(".lg\\:col-span-7 .flex.flex-wrap.gap-2 span:nth-child(1)", "badge1");
+      setText(".lg\\:col-span-7 .flex.flex-wrap.gap-2 span:nth-child(2)", "badge2");
+      setText(".lg\\:col-span-7 .flex.flex-wrap.gap-2 span:nth-child(3)", "badge3");
+      setText("main section h1", "heroTitle");
+      setText("main section h1 + p", "heroLead");
+      setText("#heroGenerate", "heroGenerate");
+      const schemaLinks = document.querySelectorAll('a[href="/.well-known/skill.json"]');
+      if (schemaLinks[1]) schemaLinks[1].textContent = t("viewSchema");
+      setText("#studio .bg-ink span", "liveStudio");
+      setText("#studio h2", "studioTitle");
+      setText('label[for="topic"]', "topic");
+      setText('label[for="platform"]', "platform");
+      setText('label[for="tone"]', "demoAngle");
+      setText('label[for="refs"]', "refs");
+      setText("#submitBtn", submitBtn.disabled ? "agentRunning" : "submit");
+      setText("#mobileSubmit", mobileSubmit.disabled ? "agentRunning" : "submit");
+      setText("#sampleBtn", "sample");
+      setText("#generateForm > p", "formNote");
+      setText(".mobile-submit button", mobileSubmit.disabled ? "agentRunning" : "submit");
+      setText(".agent-run h2", "runTitle");
+      setText(".agent-run .bg-ink span", "runEyebrow");
+      setText("section.grid article:nth-child(1) h3", "callableTitle");
+      setText("section.grid article:nth-child(1) p", "callableText");
+      setText("section.grid article:nth-child(2) h3", "reportTitle");
+      setText("section.grid article:nth-child(2) p", "reportText");
+      setText("section.grid article:nth-child(3) h3", "fallbackTitle");
+      setText("section.grid article:nth-child(3) p", "fallbackText");
+
+      topicInput.placeholder = t("topicPlaceholder");
+      refsInput.placeholder = t("refsPlaceholder");
+      const outputBox = document.querySelector("#generateForm .grid div:nth-child(2) .h-\\[46px\\]");
+      if (outputBox) outputBox.textContent = t("outputValue");
+      const outputLabel = document.querySelector("#generateForm .grid div:nth-child(2) .field-label");
+      if (outputLabel) outputLabel.textContent = t("output");
+      setupCard.innerHTML = `<b class="block mb-1">${t("setupTitle")}</b>${t("setupBody")}`;
+
+      refreshStagesText();
+      renderStages(currentStageIndex);
+      if (!loadingOverlay.classList.contains("show")) {
+        setStatus(configReady ? t("statusReady") : t("statusSetup"), configReady ? "" : "error");
+      }
+      if (!loadingOverlay.classList.contains("show")) runStatus.textContent = t("runPreparing");
+    }
+
+    function setStatus(text, tone) {
+      statusEl.textContent = text;
+      statusEl.className = "px-3 py-1.5 rounded-full text-xs font-black";
+      if (tone === "error") statusEl.classList.add("bg-red-100", "text-red-700");
+      else if (tone === "warn") statusEl.classList.add("bg-amber/15", "text-amber");
+      else statusEl.classList.add("bg-teal/10", "text-teal");
+    }
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1600);
+    }
+
+    function focusGenerator() {
+      generatorPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+      topicInput.focus({ preventScroll: true });
+    }
+
+    navGenerate?.addEventListener("click", focusGenerator);
+    heroGenerate.addEventListener("click", focusGenerator);
+    mobileSubmit.addEventListener("click", () => {
+      if (!submitBtn.disabled) form.requestSubmit();
+    });
+    const savedAppLang = appI18n[localStorage.getItem("realskill_lang")] ? localStorage.getItem("realskill_lang") : "en";
+    langSelect.addEventListener("change", () => applyAppLanguage(langSelect.value));
+    applyAppLanguage(savedAppLang);
+
+    platformOptions.forEach((option) => {
+      option.addEventListener("click", () => {
+        platformSelect.value = option.dataset.platform;
+        platformOptions.forEach((item) => {
+          const active = item === option;
+          item.classList.toggle("active", active);
+          item.setAttribute("aria-checked", active ? "true" : "false");
+        });
+      });
+    });
+
+    function renderStages(activeIndex) {
+      currentStageIndex = activeIndex;
+      stageList.innerHTML = stages.map((stage, idx) => {
+        const state = idx < activeIndex ? "done" : idx === activeIndex ? "active" : "";
+        return `<div class="stage ${state} min-h-[72px] rounded-xl border border-outline bg-white p-4 flex items-start gap-3">
+          <div><b class="block text-ink">${stage.label}</b><span class="block text-sm text-muted mt-1 leading-relaxed">${stage.detail}</span></div>
+        </div>`;
+      }).join("");
+      document.querySelectorAll(".chip").forEach((chip) => chip.classList.remove("bg-blue/10", "text-blue", "border-blue/20"));
+      const chipId = stages[Math.min(activeIndex, stages.length - 1)]?.chip;
+      if (chipId) document.getElementById(chipId).classList.add("bg-blue/10", "text-blue", "border-blue/20");
+    }
+
+    function startLoading() {
+      loadingOverlay.classList.add("show");
+      loadingStartedAt = Date.now();
+      let idx = 0;
+      renderStages(idx);
+      progressBar.style.width = "10%";
+      runStatus.textContent = stages[idx].detail;
+      elapsedTimer.textContent = "00:00";
+      elapsedTimerId = setInterval(() => {
+        const seconds = Math.floor((Date.now() - loadingStartedAt) / 1000);
+        elapsedTimer.textContent = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+      }, 500);
+      loadingTimer = setInterval(() => {
+        idx = Math.min(idx + 1, stages.length - 1);
+        renderStages(idx);
+        runStatus.textContent = stages[idx].detail;
+        progressBar.style.width = `${Math.min(16 + idx * 16, 92)}%`;
+      }, 1200);
+    }
+
+    function stopLoading() {
+      clearInterval(loadingTimer);
+      clearInterval(elapsedTimerId);
+      progressBar.style.width = "100%";
+    }
+
+    async function loadConfigStatus() {
+      try {
+        const response = await fetch("/config/status", { cache: "no-store" });
+        const data = await response.json();
+        configReady = Boolean(data.ready);
+        setupCard.classList.toggle("show", !configReady);
+        setStatus(configReady ? t("statusReady") : t("statusSetup"), configReady ? "" : "error");
+      } catch (error) {
+        configReady = false;
+        setupCard.classList.add("show");
+        setStatus(t("statusUnknown"), "warn");
+      }
+    }
+
+    sampleBtn.addEventListener("click", () => {
+      refsInput.value = [
+        "Honestly, this is the kind of tiny weekend route I would save before going out. Not fancy, just useful and oddly satisfying.",
+        "The best part was that it did not feel like a recommendation list. It felt like someone had actually walked the route and noticed the small stuff."
+      ].join("\n");
+      showToast(t("sampleLoaded"));
+    });
+
+    function friendlyError(message) {
+      if (message.includes("not configured") || message.includes("OPENAI_API_KEY")) {
+        return "Generation is not configured on this server yet. Add OPENAI_API_KEY to .env and restart uvicorn.";
+      }
+      return "Generation failed. Please check the model key, base URL, and server logs.";
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const refs = refsInput.value.split("\n").map((line) => line.trim()).filter(Boolean);
+      const payload = {
+        topic: topicInput.value.trim(),
+        platform: platformSelect.value,
+        style_refs: refs
+      };
+      if (!payload.topic) {
+        topicInput.focus();
+        return;
+      }
+      if (!configReady) {
+        setupCard.classList.add("show");
+        setStatus(t("statusSetup"), "error");
+        focusGenerator();
+        return;
+      }
+      submitBtn.disabled = true;
+      mobileSubmit.disabled = true;
+      submitBtn.textContent = t("agentRunning");
+      mobileSubmit.textContent = t("agentRunning");
+      setStatus(t("statusGenerating"), "warn");
+      startLoading();
+      try {
+        const response = await fetch("/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const responseText = await response.text();
+        if (!response.ok) throw new Error(responseText || `HTTP ${response.status}`);
+        const data = JSON.parse(responseText);
+        const report = { ...data, request: payload, saved_at: Date.now() };
+        sessionStorage.setItem("realskill_report", JSON.stringify(report));
+        localStorage.setItem("realskill_last_report", JSON.stringify(report));
+        setStatus(t("statusComplete"), "");
+        stopLoading();
+        window.location.href = "/report";
+      } catch (error) {
+        stopLoading();
+        loadingOverlay.classList.remove("show");
+        setStatus(t("statusError"), "error");
+        showToast(friendlyError(error.message));
+      } finally {
+        submitBtn.disabled = false;
+        mobileSubmit.disabled = false;
+        submitBtn.textContent = t("submit");
+        mobileSubmit.textContent = t("submit");
+      }
+    });
+
+    refreshStagesText();
+    renderStages(0);
+    loadConfigStatus();
+  </script>
+</body>
+</html>

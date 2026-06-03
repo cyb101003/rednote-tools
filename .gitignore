@@ -1,0 +1,19 @@
+.env
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+chroma_db/
+data/chroma_store/
+
+*.log
+*.tmp
+*.bak
+
+# Local screenshot experiments; curated screenshots live in docs/screenshots/.
+*.png
+!docs/screenshots/*.png
+
+RealSkill_agent.zip
