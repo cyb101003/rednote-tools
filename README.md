@@ -42,6 +42,19 @@ RealSkill is a web studio and local agent skill that turns a rough topic into pl
 - Dedicated report page with final copy, agent drafts, comparison, share card, and analysis charts.
 - Web UI plus callable FastAPI endpoint and local agent skill package.
 
+## Why RealSkill Is Different
+
+RealSkill is not a single-prompt AI writer. It is a structured content generation workflow built around platform context, multiple agent strategies, judge selection, and explainable reports.
+
+- It starts from platform-aware context instead of asking one generic model to write everything.
+- It generates multiple drafts from distinct agent roles: viral rhythm, lived-in creator voice, and rational structure.
+- It uses a judge layer to compare drafts and explain why one strategy works better.
+- It cleans the final copy so users do not accidentally publish Markdown-like AI artifacts.
+- It produces a report with final copy, draft comparison, audit signals, and platform-fit notes.
+- It works as both a web studio and a callable local agent skill.
+
+The goal is to help users move from one-off prompting to a repeatable content production system.
+
 ## Technical Architecture
 
 ```text
