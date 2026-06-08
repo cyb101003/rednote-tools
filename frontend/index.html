@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -285,12 +285,12 @@
       <nav class="flex items-center gap-3 md:gap-6">
         <select id="langSelect" aria-label="Language" class="block max-w-[112px] md:max-w-none bg-surface-low border-outline rounded-lg text-sm font-semibold px-2 md:px-3 py-1.5">
           <option value="en">English</option>
-          <option value="zh">简中</option>
-          <option value="zhHant">繁中</option>
-          <option value="ja">日本語</option>
-          <option value="ko">한국어</option>
+          <option value="zh">&#31616;&#20013;</option>
+          <option value="zhHant">&#32321;&#20013;</option>
+          <option value="ja">&#26085;&#26412;&#35486;</option>
+          <option value="ko">&#54620;&#44397;&#50612;</option>
           <option value="ms">Malay</option>
-          <option value="fr">Français</option>
+          <option value="fr">Fran&ccedil;ais</option>
         </select>
         <button class="hidden sm:inline-flex text-sm font-bold text-muted hover:text-ink transition-colors" id="navGenerate" type="button">Generate</button>
         <a class="hidden sm:inline-flex text-sm font-bold text-muted hover:text-ink transition-colors" href="/.well-known/skill.json" target="_blank" rel="noreferrer">Skill JSON</a>
@@ -396,12 +396,32 @@
             </select>
             <div class="grid grid-cols-2 gap-2" id="platformPicker" role="radiogroup" aria-label="Platform">
               <button class="platform-option active min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="xiaohongshu" role="radio" aria-checked="true">Xiaohongshu <span class="text-xs text-muted">CN</span></button>
-              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="x" role="radio" aria-checked="false">X / Twitter <span class="text-xs text-muted">EN</span></button>
-              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="linkedin" role="radio" aria-checked="false">LinkedIn <span class="text-xs text-muted">EN</span></button>
-              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="instagram" role="radio" aria-checked="false">Instagram <span class="text-xs text-muted">EN</span></button>
-              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="tiktok" role="radio" aria-checked="false">TikTok <span class="text-xs text-muted">EN</span></button>
+              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="x" role="radio" aria-checked="false">X / Twitter <span class="text-xs text-muted">Multi</span></button>
+              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="linkedin" role="radio" aria-checked="false">LinkedIn <span class="text-xs text-muted">Multi</span></button>
+              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="instagram" role="radio" aria-checked="false">Instagram <span class="text-xs text-muted">Multi</span></button>
+              <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="tiktok" role="radio" aria-checked="false">TikTok <span class="text-xs text-muted">Multi</span></button>
               <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="zhihu" role="radio" aria-checked="false">Zhihu <span class="text-xs text-muted">CN</span></button>
               <button class="platform-option min-h-12 rounded-lg border border-outline bg-surface-low px-3 py-2 text-left font-black text-sm flex justify-between items-center transition-all" type="button" data-platform="weibo" role="radio" aria-checked="false">Weibo <span class="text-xs text-muted">CN</span></button>
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label class="field-label" for="contentLanguage">Content language</label>
+              <select class="w-full px-4 py-3" id="contentLanguage" name="content_language">
+                <option value="auto">Same as interface</option>
+                <option value="en">English</option>
+                <option value="zh">Simplified Chinese</option>
+                <option value="zhHant">Traditional Chinese</option>
+                <option value="ja">Japanese</option>
+                <option value="ko">Korean</option>
+                <option value="ms">Malay</option>
+                <option value="fr">French</option>
+              </select>
+            </div>
+            <div class="space-y-2">
+              <label class="field-label">Localization</label>
+              <div class="h-[46px] rounded-lg border border-outline bg-surface-low px-4 flex items-center text-sm font-bold text-muted" id="localizationNote">Platform rhythm + local language</div>
             </div>
           </div>
 
@@ -507,6 +527,8 @@
     const elapsedTimer = document.getElementById("elapsedTimer");
     const langSelect = document.getElementById("langSelect");
     const platformSelect = document.getElementById("platform");
+    const contentLanguageSelect = document.getElementById("contentLanguage");
+    const localizationNote = document.getElementById("localizationNote");
     const platformOptions = Array.from(document.querySelectorAll(".platform-option"));
 
     let configReady = false;
@@ -530,7 +552,7 @@
         navGenerate: "Generate", apiDocs: "API Docs", badge1: "Creator workflow", badge2: "Web studio", badge3: "Local agent skill", heroTitle: "Generate platform-native copy with an agent panel.",
         heroLead: "RealSkill turns a rough idea and optional creator references into posts for Xiaohongshu, X, LinkedIn, Instagram, TikTok, Zhihu, or Weibo through retrieval, multi-agent drafting, judge selection, and audit-ready reporting.",
         heroGenerate: "Start generation", viewSchema: "View schema", liveStudio: "Live studio", studioTitle: "Generation studio",
-        topic: "Topic", topicPlaceholder: "Example: Singapore campus weekend food guide", platform: "Platform", demoAngle: "Demo angle",
+        topic: "Topic", topicPlaceholder: "Example: Singapore campus weekend food guide", platform: "Platform", contentLanguage: "Content language", localization: "Localization", localizationNote: "Platform rhythm + local language", sameAsInterface: "Same as interface", demoAngle: "Demo angle",
         output: "Output", outputValue: "Dedicated report page", refs: "Style references, one per line",
         refsPlaceholder: "Paste creator examples. RealSkill extracts cadence and rhythm without copying exact sentences.",
         submit: "Generate with agents", sample: "Load sample style", formNote: "After generation, RealSkill opens a dedicated report page with final copy, agent drafts, and analysis charts.",
@@ -547,35 +569,89 @@
         stage3Label: "Agent C checking rational structure", stage3Detail: "A structured author checks clarity and usefulness.",
         stage4Label: "Judge selecting winner", stage4Detail: "The judge scores platform fit, human feel, and viral potential.",
         stage5Label: "Opening report", stage5Detail: "Preparing final copy, draft comparison, and analysis charts."
-      },
-      zh: {
-        navGenerate: "生成", apiDocs: "API 文档", badge1: "创作者工作流", badge2: "网页工作台", badge3: "本地 Agent Skill", heroTitle: "用 Agent 面板生成平台原生文案。",
-        heroLead: "RealSkill 会把一个粗略想法和可选创作者参考，转成适合小红书、X、LinkedIn、Instagram、TikTok、知乎或微博的内容，并完成检索、多 Agent 草稿、评审选择和报告分析。",
-        heroGenerate: "开始生成", viewSchema: "查看 schema", liveStudio: "实时工作台", studioTitle: "生成工作台",
-        topic: "主题", topicPlaceholder: "例：新加坡校园周末美食路线", platform: "平台", demoAngle: "演示角度",
-        output: "输出", outputValue: "专属报告页", refs: "风格参考，每行一条",
-        refsPlaceholder: "粘贴创作者案例。RealSkill 会提取节奏和语气，但不会复制原句。",
-        submit: "用 Agent 生成", sample: "加载参考风格", formNote: "生成后，RealSkill 会打开专属报告页，展示最终文案、Agent 草稿和分析图表。",
-        callableTitle: "可被 Agent 调用", callableText: "任何支持工具调用的 Agent 都可以发现函数 schema，并调用同一个生产端点。",
-        reportTitle: "专属报告页", reportText: "工作台专注输入，结果会打开成可分享的分析视图。",
-        fallbackTitle: "本地备用入口", fallbackText: "原 Streamlit 界面仍可用于人工检查和截图。",
-        runEyebrow: "多 Agent 写作系统", runTitle: "Agent 运行中", runPreparing: "正在准备生成面板。",
-        statusReady: "已就绪", statusSetup: "需要配置", statusUnknown: "状态未知", statusGenerating: "生成中", statusComplete: "完成", statusError: "错误",
-        agentRunning: "Agent 运行中...", sampleLoaded: "已加载参考风格",
-        setupTitle: "当前服务器还没有配置生成能力。", setupBody: "请在 .env 中添加 OPENAI_API_KEY 并重启 uvicorn。",
-        stage0Label: "检索爆款记忆", stage0Detail: "正在搜索本地 Chroma 参考和创作者风格上下文。",
-        stage1Label: "Agent A 起草爆款开头", stage1Detail: "高能策展型 Agent 正在设计开头和平台节奏。",
-        stage2Label: "Agent B 改写成真人分享", stage2Detail: "生活化 Agent 正在加入真实细节和自然语气。",
-        stage3Label: "Agent C 检查理性结构", stage3Detail: "结构型 Agent 正在检查清晰度和实用性。",
-        stage4Label: "Judge 选择赢家", stage4Detail: "评审正在按平台适配、真人感和传播潜力打分。",
-        stage5Label: "打开报告", stage5Detail: "正在准备最终文案、草稿对比和分析图表。"
       }
     };
-    appI18n.zhHant = { ...appI18n.zh, heroTitle: "用 Agent 面板生成平台原生文案。", heroGenerate: "開始生成", submit: "用 Agent 生成", sample: "載入參考風格", statusReady: "已就緒", statusSetup: "需要設定", agentRunning: "Agent 運行中..." };
-    appI18n.ja = { ...appI18n.en, navGenerate: "生成", apiDocs: "API Docs", heroTitle: "Agent パネルで各プラットフォーム向けコピーを生成。", heroGenerate: "生成を開始", viewSchema: "Schemaを見る", studioTitle: "生成スタジオ", topic: "テーマ", platform: "プラットフォーム", refs: "スタイル参考、1行ずつ", submit: "Agentで生成", sample: "参考スタイルを読み込む", statusReady: "準備完了", statusSetup: "設定が必要", statusGenerating: "生成中", agentRunning: "Agent 実行中..." };
-    appI18n.ko = { ...appI18n.en, navGenerate: "생성", heroTitle: "Agent 패널로 플랫폼 네이티브 문안을 생성하세요.", heroGenerate: "생성 시작", studioTitle: "생성 스튜디오", topic: "주제", platform: "플랫폼", refs: "스타일 참고, 한 줄씩", submit: "Agent로 생성", sample: "샘플 스타일 불러오기", statusReady: "준비됨", statusSetup: "설정 필요", statusGenerating: "생성 중", agentRunning: "Agent 실행 중..." };
-    appI18n.ms = { ...appI18n.en, navGenerate: "Jana", heroTitle: "Jana copy native platform dengan panel agent.", heroGenerate: "Mula jana", studioTitle: "Studio jana", topic: "Topik", platform: "Platform", refs: "Rujukan gaya, satu setiap baris", submit: "Jana dengan agent", sample: "Muat gaya contoh", statusReady: "Sedia", statusSetup: "Perlu tetapan", statusGenerating: "Menjana", agentRunning: "Agent berjalan..." };
-    appI18n.fr = { ...appI18n.en, navGenerate: "Generer", heroTitle: "Generez un copy natif pour chaque plateforme avec un panel agent.", heroGenerate: "Lancer", viewSchema: "Voir le schema", studioTitle: "Studio de generation", topic: "Sujet", platform: "Plateforme", refs: "References de style, une par ligne", submit: "Generer avec les agents", sample: "Charger un style exemple", statusReady: "Pret", statusSetup: "Configuration requise", statusGenerating: "Generation", agentRunning: "Agents en cours..." };
+    const languageNamesByUi = {
+      en: { auto: "Same as interface", en: "English", zh: "Simplified Chinese", zhHant: "Traditional Chinese", ja: "Japanese", ko: "Korean", ms: "Malay", fr: "French" },
+      zh: { auto: "\u8ddf\u968f\u754c\u9762\u8bed\u8a00", en: "\u82f1\u8bed", zh: "\u7b80\u4f53\u4e2d\u6587", zhHant: "\u7e41\u4f53\u4e2d\u6587", ja: "\u65e5\u8bed", ko: "\u97e9\u8bed", ms: "\u9a6c\u6765\u8bed", fr: "\u6cd5\u8bed" },
+      zhHant: { auto: "\u8ddf\u96a8\u4ecb\u9762\u8a9e\u8a00", en: "\u82f1\u8a9e", zh: "\u7c21\u9ad4\u4e2d\u6587", zhHant: "\u7e41\u9ad4\u4e2d\u6587", ja: "\u65e5\u8a9e", ko: "\u97d3\u8a9e", ms: "\u99ac\u4f86\u8a9e", fr: "\u6cd5\u8a9e" },
+      ja: { auto: "\u8868\u793a\u8a00\u8a9e\u306b\u5408\u308f\u305b\u308b", en: "\u82f1\u8a9e", zh: "\u7c21\u4f53\u5b57\u4e2d\u56fd\u8a9e", zhHant: "\u7e41\u4f53\u5b57\u4e2d\u56fd\u8a9e", ja: "\u65e5\u672c\u8a9e", ko: "\u97d3\u56fd\u8a9e", ms: "\u30de\u30ec\u30fc\u8a9e", fr: "\u30d5\u30e9\u30f3\u30b9\u8a9e" },
+      ko: { auto: "\uc778\ud130\ud398\uc774\uc2a4 \uc5b8\uc5b4\uc640 \ub3d9\uc77c", en: "\uc601\uc5b4", zh: "\uc911\uad6d\uc5b4 \uac04\uccb4", zhHant: "\uc911\uad6d\uc5b4 \ubc88\uccb4", ja: "\uc77c\ubcf8\uc5b4", ko: "\ud55c\uad6d\uc5b4", ms: "\ub9d0\ub808\uc774\uc5b4", fr: "\ud504\ub791\uc2a4\uc5b4" },
+      ms: { auto: "Ikut bahasa antara muka", en: "Inggeris", zh: "Cina Ringkas", zhHant: "Cina Tradisional", ja: "Jepun", ko: "Korea", ms: "Malay", fr: "Perancis" },
+      fr: { auto: "Identique a l'interface", en: "Anglais", zh: "Chinois simplifie", zhHant: "Chinois traditionnel", ja: "Japonais", ko: "Coreen", ms: "Malais", fr: "Francais" }
+    };
+
+    const studioI18nOverride = {
+      en: {
+        contentLanguage: "Content language", localization: "Localization", localizationNote: "Platform rhythm + local language", sameAsInterface: "Same as interface",
+        demoAngle: "Demo angle", toneCampus: "Campus creator", toneGuide: "Practical guide", toneDiary: "Personal diary",
+        output: "Output", outputValue: "Dedicated report page"
+      },
+      zh: {
+        navGenerate: "\u751f\u6210", apiDocs: "API \u6587\u6863", badge1: "\u521b\u4f5c\u8005\u5de5\u4f5c\u6d41", badge2: "\u7f51\u9875\u5de5\u4f5c\u53f0", badge3: "\u672c\u5730 Agent Skill",
+        heroTitle: "\u7528 Agent \u9762\u677f\u751f\u6210\u5e73\u53f0\u539f\u751f\u6587\u6848\u3002", heroLead: "RealSkill \u4f1a\u628a\u4e00\u4e2a\u7c97\u7565\u60f3\u6cd5\u548c\u53ef\u9009\u521b\u4f5c\u8005\u53c2\u8003\uff0c\u8f6c\u6210\u9002\u5408\u591a\u4e2a\u56fd\u5185\u5916\u5e73\u53f0\u7684\u5185\u5bb9\uff0c\u5e76\u5b8c\u6210\u68c0\u7d22\u3001\u591a Agent \u8349\u7a3f\u3001\u8bc4\u5ba1\u9009\u62e9\u548c\u62a5\u544a\u5206\u6790\u3002",
+        heroGenerate: "\u5f00\u59cb\u751f\u6210", viewSchema: "\u67e5\u770b schema", liveStudio: "\u5b9e\u65f6\u5de5\u4f5c\u53f0", studioTitle: "\u751f\u6210\u5de5\u4f5c\u53f0",
+        topic: "\u4e3b\u9898", topicPlaceholder: "\u4f8b\uff1a\u65b0\u52a0\u5761\u6821\u56ed\u5468\u672b\u7f8e\u98df\u8def\u7ebf", platform: "\u5e73\u53f0", contentLanguage: "\u5185\u5bb9\u8bed\u8a00", localization: "\u672c\u5730\u5316", localizationNote: "\u5e73\u53f0\u8282\u594f + \u672c\u5730\u8bed\u8a00",
+        sameAsInterface: "\u8ddf\u968f\u754c\u9762\u8bed\u8a00", demoAngle: "\u6f14\u793a\u89d2\u5ea6", toneCampus: "\u6821\u56ed\u521b\u4f5c\u8005", toneGuide: "\u5b9e\u7528\u6307\u5357", toneDiary: "\u4e2a\u4eba\u65e5\u8bb0",
+        output: "\u8f93\u51fa", outputValue: "\u4e13\u5c5e\u62a5\u544a\u9875", refs: "\u98ce\u683c\u53c2\u8003\uff0c\u6bcf\u884c\u4e00\u6761", refsPlaceholder: "\u7c98\u8d34\u521b\u4f5c\u8005\u6848\u4f8b\u3002RealSkill \u4f1a\u63d0\u53d6\u8282\u594f\u548c\u8bed\u6c14\uff0c\u4f46\u4e0d\u4f1a\u590d\u5236\u539f\u53e5\u3002",
+        submit: "\u7528 Agent \u751f\u6210", sample: "\u52a0\u8f7d\u53c2\u8003\u98ce\u683c", formNote: "\u751f\u6210\u540e\uff0cRealSkill \u4f1a\u6253\u5f00\u4e13\u5c5e\u62a5\u544a\u9875\uff0c\u5c55\u793a\u6700\u7ec8\u6587\u6848\u3001Agent \u8349\u7a3f\u548c\u5206\u6790\u56fe\u8868\u3002",
+        callableTitle: "\u53ef\u88ab Agent \u8c03\u7528", callableText: "\u4efb\u4f55\u652f\u6301\u5de5\u5177\u8c03\u7528\u7684 Agent \u90fd\u53ef\u4ee5\u53d1\u73b0\u51fd\u6570 schema\uff0c\u5e76\u8c03\u7528\u540c\u4e00\u4e2a\u751f\u4ea7\u7aef\u70b9\u3002",
+        reportTitle: "\u4e13\u5c5e\u62a5\u544a\u9875", reportText: "\u5de5\u4f5c\u53f0\u4e13\u6ce8\u8f93\u5165\uff0c\u7ed3\u679c\u4f1a\u6253\u5f00\u6210\u53ef\u5206\u4eab\u7684\u5206\u6790\u89c6\u56fe\u3002",
+        fallbackTitle: "\u672c\u5730\u5907\u7528\u5165\u53e3", fallbackText: "\u539f Streamlit \u754c\u9762\u4ecd\u53ef\u7528\u4e8e\u4eba\u5de5\u68c0\u67e5\u548c\u622a\u56fe\u3002",
+        runEyebrow: "\u591a Agent \u5199\u4f5c\u7cfb\u7edf", runTitle: "Agent \u8fd0\u884c\u4e2d", runPreparing: "\u6b63\u5728\u51c6\u5907\u751f\u6210\u9762\u677f\u3002",
+        statusReady: "\u5df2\u5c31\u7eea", statusSetup: "\u9700\u8981\u914d\u7f6e", statusUnknown: "\u72b6\u6001\u672a\u77e5", statusGenerating: "\u751f\u6210\u4e2d", statusComplete: "\u5b8c\u6210", statusError: "\u9519\u8bef",
+        agentRunning: "Agent \u8fd0\u884c\u4e2d...", sampleLoaded: "\u5df2\u52a0\u8f7d\u53c2\u8003\u98ce\u683c",
+        setupTitle: "\u5f53\u524d\u670d\u52a1\u5668\u8fd8\u6ca1\u6709\u914d\u7f6e\u751f\u6210\u80fd\u529b\u3002", setupBody: "\u8bf7\u5728 .env \u4e2d\u6dfb\u52a0 OPENAI_API_KEY \u5e76\u91cd\u542f uvicorn\u3002",
+        stage0Label: "\u68c0\u7d22\u7206\u6b3e\u8bb0\u5fc6", stage0Detail: "\u6b63\u5728\u641c\u7d22\u672c\u5730 Chroma \u53c2\u8003\u548c\u521b\u4f5c\u8005\u98ce\u683c\u4e0a\u4e0b\u6587\u3002",
+        stage1Label: "Agent A \u8d77\u8349\u7206\u6b3e\u5f00\u5934", stage1Detail: "\u9ad8\u80fd\u7b56\u5c55\u578b Agent \u6b63\u5728\u8bbe\u8ba1\u5f00\u5934\u548c\u5e73\u53f0\u8282\u594f\u3002",
+        stage2Label: "Agent B \u6539\u5199\u6210\u771f\u5b9e\u5206\u4eab", stage2Detail: "\u751f\u6d3b\u5316 Agent \u6b63\u5728\u52a0\u5165\u771f\u5b9e\u7ec6\u8282\u548c\u81ea\u7136\u8bed\u6c14\u3002",
+        stage3Label: "Agent C \u68c0\u67e5\u7406\u6027\u7ed3\u6784", stage3Detail: "\u7ed3\u6784\u578b Agent \u6b63\u5728\u68c0\u67e5\u6e05\u6670\u5ea6\u548c\u5b9e\u7528\u6027\u3002",
+        stage4Label: "Judge \u9009\u62e9\u8d62\u5bb6", stage4Detail: "\u8bc4\u5ba1\u6b63\u5728\u6309\u5e73\u53f0\u9002\u914d\u3001\u771f\u4eba\u611f\u548c\u4f20\u64ad\u6f5c\u529b\u6253\u5206\u3002",
+        stage5Label: "\u6253\u5f00\u62a5\u544a", stage5Detail: "\u6b63\u5728\u51c6\u5907\u6700\u7ec8\u6587\u6848\u3001\u8349\u7a3f\u5bf9\u6bd4\u548c\u5206\u6790\u56fe\u8868\u3002"
+      },
+      zhHant: {},
+      ja: {},
+      ko: {
+        navGenerate: "\uc0dd\uc131", apiDocs: "API \ubb38\uc11c", badge1: "\ud06c\ub9ac\uc5d0\uc774\ud130 \uc6cc\ud06c\ud50c\ub85c", badge2: "\uc6f9 \uc2a4\ud29c\ub514\uc624", badge3: "\ub85c\uceec Agent Skill",
+        heroTitle: "Agent \ud328\ub110\ub85c \ud50c\ub7ab\ud3fc\uc5d0 \ub9de\ub294 \uc790\uc5f0\uc2a4\ub7ec\uc6b4 \ubb38\uc548\uc744 \uc0dd\uc131\ud558\uc138\uc694.", heroLead: "RealSkill\uc740 \uac04\ub2e8\ud55c \uc544\uc774\ub514\uc5b4\uc640 \uc120\ud0dd\ud55c \ucc38\uace0 \ubb38\uc548\uc744 \ubc14\ud0d5\uc73c\ub85c \uc5ec\ub7ec \uad6d\ub0b4\uc678 \ud50c\ub7ab\ud3fc\uc5d0 \ub9de\ub294 \ucf58\ud150\uce20\ub97c \ub9cc\ub4e4\uace0, \uac80\uc0c9, \ub2e4\uc911 Agent \ucd08\uc548, \uc2ec\uc0ac, \ub9ac\ud3ec\ud2b8\uae4c\uc9c0 \uc81c\uacf5\ud569\ub2c8\ub2e4.",
+        heroGenerate: "\uc0dd\uc131 \uc2dc\uc791", viewSchema: "Schema \ubcf4\uae30", liveStudio: "\ub77c\uc774\ube0c \uc2a4\ud29c\ub514\uc624", studioTitle: "\uc0dd\uc131 \uc2a4\ud29c\ub514\uc624",
+        topic: "\uc8fc\uc81c", topicPlaceholder: "\uc608: \uc2f1\uac00\ud3ec\ub974 \ucea0\ud37c\uc2a4 \uc8fc\ub9d0 \ub9db\uc9d1 \ucf54\uc2a4", platform: "\ud50c\ub7ab\ud3fc", contentLanguage: "\ucf58\ud150\uce20 \uc5b8\uc5b4", localization: "\ud604\uc9c0\ud654", localizationNote: "\ud50c\ub7ab\ud3fc \ub9ac\ub4ec + \ud604\uc9c0 \uc5b8\uc5b4",
+        sameAsInterface: "\uc778\ud130\ud398\uc774\uc2a4 \uc5b8\uc5b4\uc640 \ub3d9\uc77c", demoAngle: "\ub370\ubaa8 \ubc29\ud5a5", toneCampus: "\ucea0\ud37c\uc2a4 \ud06c\ub9ac\uc5d0\uc774\ud130", toneGuide: "\uc2e4\uc6a9 \uac00\uc774\ub4dc", toneDiary: "\uac1c\uc778 \uc77c\uae30",
+        output: "\ucd9c\ub825", outputValue: "\uc804\uc6a9 \ub9ac\ud3ec\ud2b8 \ud398\uc774\uc9c0", refs: "\uc2a4\ud0c0\uc77c \ucc38\uace0, \ud55c \uc904\uc529", refsPlaceholder: "\ud06c\ub9ac\uc5d0\uc774\ud130 \uc608\uc2dc\ub97c \ubd99\uc5ec \ub123\uc73c\uc138\uc694. RealSkill\uc740 \ubb38\uc7a5\uc744 \ubcf5\uc0ac\ud558\uc9c0 \uc54a\uace0 \ub9ac\ub4ec\uacfc \ub9d0\ud22c\ub9cc \ucd94\ucd9c\ud569\ub2c8\ub2e4.",
+        submit: "Agent\ub85c \uc0dd\uc131", sample: "\uc0d8\ud50c \uc2a4\ud0c0\uc77c \ubd88\ub7ec\uc624\uae30", formNote: "\uc0dd\uc131\uc774 \ub05d\ub098\uba74 \ucd5c\uc885 \ubb38\uc548, Agent \ucd08\uc548, \ubd84\uc11d \ucc28\ud2b8\uac00 \uc788\ub294 \uc804\uc6a9 \ub9ac\ud3ec\ud2b8 \ud398\uc774\uc9c0\uac00 \uc5f4\ub9bd\ub2c8\ub2e4.",
+        callableTitle: "Agent \ud638\ucd9c \uac00\ub2a5", callableText: "\ub3c4\uad6c \ud638\ucd9c\uc744 \uc9c0\uc6d0\ud558\ub294 Agent\ub294 \uac19\uc740 \ud568\uc218 schema\ub97c \ubc1c\uacac\ud558\uace0 \ub3d9\uc77c\ud55c \uc0dd\uc131 \uc5d4\ub4dc\ud3ec\uc778\ud2b8\ub97c \ud638\ucd9c\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.",
+        reportTitle: "\uc804\uc6a9 \ub9ac\ud3ec\ud2b8 \ud398\uc774\uc9c0", reportText: "\uc2a4\ud29c\ub514\uc624\ub294 \uc785\ub825\uc5d0 \uc9d1\uc911\ud558\uace0, \uacb0\uacfc\ub294 \uacf5\uc720 \uac00\ub2a5\ud55c \ubd84\uc11d \ud654\uba74\uc73c\ub85c \uc5f4\ub9bd\ub2c8\ub2e4.",
+        fallbackTitle: "\ub85c\uceec \uc608\ube44 \uc785\uad6c", fallbackText: "\uae30\uc874 Streamlit \ud654\uba74\uc740 \uc218\ub3d9 \ud655\uc778\uacfc \uc2a4\ud06c\ub9b0\uc0f7 \uc6a9\ub3c4\ub85c \uacc4\uc18d \uc0ac\uc6a9\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.",
+        runEyebrow: "\ub2e4\uc911 Agent \uc791\uc131 \uc2dc\uc2a4\ud15c", runTitle: "Agent \uc2e4\ud589 \uc911", runPreparing: "\uc0dd\uc131 \ud328\ub110\uc744 \uc900\ube44\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4.",
+        statusReady: "\uc900\ube44\ub428", statusSetup: "\uc124\uc815 \ud544\uc694", statusUnknown: "\uc0c1\ud0dc \uc54c \uc218 \uc5c6\uc74c", statusGenerating: "\uc0dd\uc131 \uc911", statusComplete: "\uc644\ub8cc", statusError: "\uc624\ub958",
+        agentRunning: "Agent \uc2e4\ud589 \uc911...", sampleLoaded: "\uc0d8\ud50c \uc2a4\ud0c0\uc77c\uc744 \ubd88\ub7ec\uc654\uc2b5\ub2c8\ub2e4",
+        setupTitle: "\ud604\uc7ac \uc11c\ubc84\uc5d0 \uc0dd\uc131 \uae30\ub2a5\uc774 \uc124\uc815\ub418\uc5b4 \uc788\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.", setupBody: ".env\uc5d0 OPENAI_API_KEY\ub97c \ucd94\uac00\ud558\uace0 uvicorn\uc744 \ub2e4\uc2dc \uc2dc\uc791\ud558\uc138\uc694.",
+        stage0Label: "\ubc14\uc774\ub7f4 \uba54\ubaa8\ub9ac \uac80\uc0c9", stage0Detail: "\ub85c\uceec Chroma \ucc38\uace0 \uc790\ub8cc\uc640 \ud06c\ub9ac\uc5d0\uc774\ud130 \uc2a4\ud0c0\uc77c \ubb38\ub9e5\uc744 \uac80\uc0c9\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4.",
+        stage1Label: "Agent A\uac00 \uac15\ud55c \ud6c4\ud0b9 \ucd08\uc548 \uc791\uc131", stage1Detail: "\ud6c4\ud0b9\uacfc \ud50c\ub7ab\ud3fc \ub9ac\ub4ec\uc744 \uc124\uacc4\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4.",
+        stage2Label: "Agent B\uac00 \uc2e4\uc81c \uacf5\uc720\uc790\ucc98\ub7fc \uc7ac\uc791\uc131", stage2Detail: "\uc0dd\ud65c\uac10 \uc788\ub294 \ub514\ud14c\uc77c\uacfc \uc790\uc5f0\uc2a4\ub7ec\uc6b4 \ub9d0\ud22c\ub97c \ub354\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4.",
+        stage3Label: "Agent C\uac00 \uad6c\uc870 \uc810\uac80", stage3Detail: "\uba85\ud655\uc131\uacfc \uc2e4\uc6a9\uc131\uc744 \ud655\uc778\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4.",
+        stage4Label: "Judge\uac00 \uc6b0\uc2b9 \ucd08\uc548 \uc120\ud0dd", stage4Detail: "\ud50c\ub7ab\ud3fc \uc801\ud569\ub3c4, \uc0ac\ub78c \uac19\uc740 \ud1a4, \ud655\uc0b0 \uac00\ub2a5\uc131\uc744 \ud3c9\uac00\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4.",
+        stage5Label: "\ub9ac\ud3ec\ud2b8 \uc5f4\uae30", stage5Detail: "\ucd5c\uc885 \ubb38\uc548, \ucd08\uc548 \ube44\uad50, \ubd84\uc11d \ucc28\ud2b8\ub97c \uc900\ube44\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4."
+      },
+      ms: {
+        contentLanguage: "Bahasa kandungan", localization: "Penyetempatan", localizationNote: "Rentak platform + bahasa tempatan", sameAsInterface: "Ikut bahasa antara muka",
+        demoAngle: "Sudut demo", toneCampus: "Pencipta kampus", toneGuide: "Panduan praktikal", toneDiary: "Diari peribadi",
+        output: "Output", outputValue: "Halaman laporan khas", refsPlaceholder: "Tampal contoh pencipta. RealSkill ambil rentak dan gaya, bukan salin ayat.",
+        formNote: "Selepas jana, RealSkill membuka halaman laporan dengan salinan akhir, draf agent, dan carta analisis."
+      },
+      fr: {
+        contentLanguage: "Langue du contenu", localization: "Localisation", localizationNote: "Rythme plateforme + langue locale", sameAsInterface: "Identique a l'interface",
+        demoAngle: "Angle de demo", toneCampus: "Createur campus", toneGuide: "Guide pratique", toneDiary: "Journal personnel",
+        output: "Sortie", outputValue: "Page de rapport dediee", refsPlaceholder: "Collez des exemples createur. RealSkill extrait le rythme et le ton sans copier les phrases.",
+        formNote: "Apres generation, RealSkill ouvre une page de rapport avec le copy final, les brouillons Agent et les graphiques d'analyse."
+      }
+    };
+
+    studioI18nOverride.zhHant = { ...studioI18nOverride.zh, sameAsInterface: "\u8ddf\u96a8\u4ecb\u9762\u8a9e\u8a00", contentLanguage: "\u5167\u5bb9\u8a9e\u8a00", localization: "\u5728\u5730\u5316", localizationNote: "\u5e73\u53f0\u7bc0\u594f + \u5728\u5730\u8a9e\u8a00" };
+    studioI18nOverride.ja = { ...studioI18nOverride.en, contentLanguage: "\u30b3\u30f3\u30c6\u30f3\u30c4\u8a00\u8a9e", localization: "\u30ed\u30fc\u30ab\u30e9\u30a4\u30ba", localizationNote: "\u5e73\u53f0\u30ea\u30ba\u30e0 + \u73fe\u5730\u306e\u8868\u73fe", sameAsInterface: "\u8868\u793a\u8a00\u8a9e\u306b\u5408\u308f\u305b\u308b", demoAngle: "\u30c7\u30e2\u306e\u5207\u308a\u53e3", toneCampus: "\u30ad\u30e3\u30f3\u30d1\u30b9\u6295\u7a3f\u8005", toneGuide: "\u5b9f\u7528\u30ac\u30a4\u30c9", toneDiary: "\u500b\u4eba\u65e5\u8a18", output: "\u51fa\u529b", outputValue: "\u5c02\u7528\u30ec\u30dd\u30fc\u30c8\u30da\u30fc\u30b8", refsPlaceholder: "\u30af\u30ea\u30a8\u30a4\u30bf\u30fc\u306e\u53c2\u8003\u6587\u3092\u8cbc\u308a\u4ed8\u3051\u3066\u304f\u3060\u3055\u3044\u3002RealSkill \u306f\u6587\u305d\u306e\u3082\u306e\u3067\u306f\u306a\u304f\u3001\u30ea\u30ba\u30e0\u3068\u8a9e\u308a\u53e3\u3092\u62bd\u51fa\u3057\u307e\u3059\u3002" };
+    Object.keys(studioI18nOverride).forEach((lang) => {
+      appI18n[lang] = { ...(appI18n[lang] || appI18n.en), ...studioI18nOverride[lang] };
+    });
 
     function t(key) {
       return appI18n[currentUiLang]?.[key] || appI18n.en[key] || key;
@@ -613,7 +689,19 @@
       setText("#studio h2", "studioTitle");
       setText('label[for="topic"]', "topic");
       setText('label[for="platform"]', "platform");
+      setText('label[for="contentLanguage"]', "contentLanguage");
+      const localizationLabel = localizationNote?.parentElement?.querySelector(".field-label");
+      if (localizationLabel) localizationLabel.textContent = t("localization");
+      if (localizationNote) localizationNote.textContent = t("localizationNote");
+      const contentNames = languageNamesByUi[currentUiLang] || languageNamesByUi.en;
+      Array.from(contentLanguageSelect?.options || []).forEach((option) => {
+        option.textContent = contentNames[option.value] || option.textContent;
+      });
       setText('label[for="tone"]', "demoAngle");
+      const toneOptions = document.querySelectorAll("#tone option");
+      if (toneOptions[0]) toneOptions[0].textContent = t("toneCampus");
+      if (toneOptions[1]) toneOptions[1].textContent = t("toneGuide");
+      if (toneOptions[2]) toneOptions[2].textContent = t("toneDiary");
       setText('label[for="refs"]', "refs");
       setText("#submitBtn", submitBtn.disabled ? "agentRunning" : "submit");
       setText("#mobileSubmit", mobileSubmit.disabled ? "agentRunning" : "submit");
@@ -631,9 +719,9 @@
 
       topicInput.placeholder = t("topicPlaceholder");
       refsInput.placeholder = t("refsPlaceholder");
-      const outputBox = document.querySelector("#generateForm .grid div:nth-child(2) .h-\\[46px\\]");
+      const outputBox = document.querySelector("#tone")?.closest(".grid")?.querySelector(".space-y-2:nth-child(2) .h-\\[46px\\]");
       if (outputBox) outputBox.textContent = t("outputValue");
-      const outputLabel = document.querySelector("#generateForm .grid div:nth-child(2) .field-label");
+      const outputLabel = outputBox?.parentElement?.querySelector(".field-label");
       if (outputLabel) outputLabel.textContent = t("output");
       setupCard.innerHTML = `<b class="block mb-1">${t("setupTitle")}</b>${t("setupBody")}`;
 
@@ -664,12 +752,26 @@
       topicInput.focus({ preventScroll: true });
     }
 
+    function resolvedContentLanguage() {
+      const selected = contentLanguageSelect?.value || "auto";
+      if (selected !== "auto") return selected;
+      const uiLang = langSelect?.value || localStorage.getItem("realskill_lang") || currentUiLang || "en";
+      return appI18n[uiLang] ? uiLang : "en";
+    }
+
     navGenerate?.addEventListener("click", focusGenerator);
     heroGenerate.addEventListener("click", focusGenerator);
     mobileSubmit.addEventListener("click", () => {
       if (!submitBtn.disabled) form.requestSubmit();
     });
     const savedAppLang = appI18n[localStorage.getItem("realskill_lang")] ? localStorage.getItem("realskill_lang") : "en";
+    const savedContentLanguage = localStorage.getItem("realskill_content_language") || "auto";
+    if ([...contentLanguageSelect.options].some((option) => option.value === savedContentLanguage)) {
+      contentLanguageSelect.value = savedContentLanguage;
+    }
+    contentLanguageSelect.addEventListener("change", () => {
+      localStorage.setItem("realskill_content_language", contentLanguageSelect.value);
+    });
     langSelect.addEventListener("change", () => applyAppLanguage(langSelect.value));
     applyAppLanguage(savedAppLang);
 
@@ -758,6 +860,7 @@
       const payload = {
         topic: topicInput.value.trim(),
         platform: platformSelect.value,
+        content_language: resolvedContentLanguage(),
         style_refs: refs
       };
       if (!payload.topic) {
@@ -810,3 +913,5 @@
   </script>
 </body>
 </html>
+
+

@@ -11,7 +11,8 @@ from pydantic import BaseModel
 
 load_dotenv(override=True, encoding="utf-8-sig")
 
-from core.generator import generate_variants
+from core.generator import default_language_for_platform, generate_variants
+from core.localization import normalize_content_language
 from core.judge import judge_and_select, detect_ai_score
 from core.humanize import humanize_by_llm, rule_based_humanize
 from core.publish_cleaner import clean_publish_text, clean_variant_map
@@ -49,6 +50,7 @@ def use_final_llm_humanize():
 class SkillRequest(BaseModel):
     topic: str
     platform: str
+    content_language: str = "auto"
     style_refs: list = []
 
 @app.post("/generate")
@@ -59,12 +61,13 @@ async def generate(req: SkillRequest):
             status_code=503,
             detail=config["message"],
         )
-    variants = clean_variant_map(await generate_variants(req.topic, req.platform, req.style_refs))
+    content_language = normalize_content_language(req.content_language, default_language_for_platform(req.platform))
+    variants = clean_variant_map(await generate_variants(req.topic, req.platform, req.style_refs, content_language))
     verdict = judge_and_select(variants, req.platform)
     winner_key = verdict.get("winner", "B")
     best_text = variants.get(winner_key) or variants.get("B") or next(iter(variants.values()))
-    humanized = humanize_by_llm(best_text, req.platform) if use_final_llm_humanize() else best_text
-    final = clean_publish_text(rule_based_humanize(humanized, req.platform))
+    humanized = humanize_by_llm(best_text, req.platform, content_language) if use_final_llm_humanize() else best_text
+    final = clean_publish_text(rule_based_humanize(humanized, req.platform, content_language))
     final_ai_score = detect_ai_score(final)
     risk_label = "low" if final_ai_score > 7 else "medium" if final_ai_score > 4 else "high"
     return {
@@ -79,6 +82,7 @@ async def generate(req: SkillRequest):
         "ai_score": round(final_ai_score, 1),
         "humanize_mode": "llm+rules" if use_final_llm_humanize() else "rules",
         "platform": req.platform,
+        "content_language": content_language,
         "generated_at": int(time.time())
     }
 

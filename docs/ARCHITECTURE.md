@@ -125,8 +125,8 @@ CHROMA_PATH=./chroma_db
 RealSkill separates UI language from output platform behavior.
 
 - UI language can be switched across supported languages.
-- Domestic platforms default toward Chinese output.
-- Global platforms default toward conversational English output.
+- Domestic platforms default toward Chinese output when language is set to auto.
+- X/Twitter, LinkedIn, Instagram, and TikTok support Chinese plus all current foreign-language outputs: English, Japanese, Korean, Malay, and French.
 - Platform-specific prompt rules can be extended without changing the whole application.
 
 This makes the product easier to adapt to additional regions, platforms, and creator markets.

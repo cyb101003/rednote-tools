@@ -6,6 +6,7 @@ from chromadb import PersistentClient
 from chromadb.utils import embedding_functions
 from agents.prompts import AGENT_A_PROMPT, AGENT_B_PROMPT, AGENT_C_PROMPT
 from core.social_trends import build_social_trend_context
+from core.localization import build_localized_directive, language_profile, normalize_content_language
 from openai import OpenAI
 
 load_dotenv(override=True, encoding="utf-8-sig")
@@ -56,35 +57,15 @@ plog：好好生活 宅宅幸福
 """
 
 # ========== 同步参考检索 ==========
-CHINESE_PLATFORMS = {"xiaohongshu", "zhihu", "weibo"}
-ENGLISH_PLATFORMS = {"x", "twitter", "linkedin", "instagram", "tiktok"}
-
-
 def normalize_platform(platform: str) -> str:
     return (platform or "xiaohongshu").strip().lower()
 
 
-def build_language_directive(platform: str) -> str:
+def default_language_for_platform(platform: str) -> str:
     platform_key = normalize_platform(platform)
-    if platform_key in CHINESE_PLATFORMS:
-        return (
-            "Output language: Simplified Chinese.\n"
-            "Do not write the final copy in English unless the user topic itself requires a short English phrase.\n"
-            "Keep the voice natural for Chinese social platforms: concrete, conversational, and not like official marketing copy."
-        )
-    if platform_key in ENGLISH_PLATFORMS:
-        return (
-            "Output language: English.\n"
-            "Write like a real editor or creator, not like generic AI marketing copy.\n"
-            "Use natural contractions, specific lived-in details, and varied sentence lengths.\n"
-            "Avoid template phrases such as 'In today's fast-paced world', 'game-changer', 'unlock', 'elevate', "
-            "'delve into', 'seamless', 'transform your', 'comprehensive guide', and 'as an AI'.\n"
-            "Do not include Chinese filler words or Chinese hashtags."
-        )
-    return (
-        "Output language: English by default.\n"
-        "Keep the copy conversational, specific, and platform-native."
-    )
+    if platform_key in {"xiaohongshu", "zhihu", "weibo"}:
+        return "zh"
+    return "en"
 
 
 ENGLISH_FEW_SHOT_SAMPLES = """
@@ -169,21 +150,23 @@ def build_style_reference_context(style_refs: list[str] | None) -> str:
     )
 
 
-async def generate_variants(topic: str, platform: str, style_refs: list[str] | None = None) -> dict:
+async def generate_variants(topic: str, platform: str, style_refs: list[str] | None = None, content_language: str | None = None) -> dict:
     platform = normalize_platform(platform)
+    content_language = normalize_content_language(content_language, default_language_for_platform(platform))
     loop = asyncio.get_event_loop()
     ref_future = loop.run_in_executor(None, get_references_sync, topic, platform)
     trend_future = loop.run_in_executor(None, build_social_trend_context, topic, platform)
     ref_text, trend_text = await asyncio.gather(ref_future, trend_future)
     
     # Few-shot 样本 + 向量检索参考
-    combined = FEW_SHOT_SAMPLES if platform in CHINESE_PLATFORMS else ENGLISH_FEW_SHOT_SAMPLES
+    profile = language_profile(content_language)
+    combined = profile.get("samples") or ENGLISH_FEW_SHOT_SAMPLES
     if trend_text:
         combined += trend_text
     if ref_text:
         combined += f"\n\n【同平台爆款参考】：\n{ref_text}"
     combined += build_style_reference_context(style_refs)
-    combined += f"\n\n[Language and voice requirements]\n{build_language_directive(platform)}"
+    combined += f"\n\n[Language and localization requirements]\n{build_localized_directive(platform, content_language, default_language_for_platform(platform))}"
     context = f"\n\n{combined}" if combined else ""
 
     prompts = {

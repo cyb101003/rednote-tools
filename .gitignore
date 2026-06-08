@@ -17,3 +17,8 @@ data/chroma_store/
 !docs/screenshots/*.png
 
 RealSkill_agent.zip
+
+video/node_modules/
+video/out/frames/
+video/out/checks/
+video/out/check_pill_test.png

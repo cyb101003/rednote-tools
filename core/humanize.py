@@ -1,21 +1,24 @@
 import random
 
 from agents.prompts import HUMANIZE_PROMPT
+from core.localization import language_profile
 from .generator import call_llm_sync
 
 ENGLISH_PLATFORMS = {"x", "twitter", "linkedin", "instagram", "tiktok"}
 
 
-def humanize_by_llm(text: str, platform: str = "") -> str:
-    source = f"Target platform: {platform}\n\n{text}" if platform else text
+def humanize_by_llm(text: str, platform: str = "", content_language: str = "en") -> str:
+    lang = language_profile(content_language)
+    source = f"Target platform: {platform}\nContent language: {lang['name']}\n\n{text}" if platform else text
     prompt = HUMANIZE_PROMPT.format(text=source)
     return call_llm_sync(prompt, temperature=0.9)
 
 
-def rule_based_humanize(text: str, platform: str) -> str:
+def rule_based_humanize(text: str, platform: str, content_language: str = "en") -> str:
     platform = (platform or "").strip().lower()
+    language = (content_language or "en").strip()
 
-    if platform in ENGLISH_PLATFORMS:
+    if language == "en":
         replacements = {
             "Firstly,": "",
             "In conclusion,": "",
@@ -39,6 +42,20 @@ def rule_based_humanize(text: str, platform: str) -> str:
             text = text.replace(old, new)
         for cn_filler in ["就是说", "你懂吧", "反正", "宝子", "姐妹", "家人们", "嗯..."]:
             text = text.replace(cn_filler, "")
+        return text.strip()
+
+    if language in {"ja", "ko", "ms", "fr", "zhHant"}:
+        replacements = {
+            "In conclusion,": "",
+            "Firstly,": "",
+            "game-changer": "useful shift",
+            "unlock": "make easier",
+            "elevate": "improve",
+            "delve into": "look at",
+            "comprehensive guide": "practical guide",
+        }
+        for old, new in replacements.items():
+            text = text.replace(old, new)
         return text.strip()
 
     fillers = ["就是说", "嗯...", "就那种", "你懂吧", "emmm", "反正"]

@@ -30,7 +30,8 @@ RealSkill is a web studio and local agent skill that turns a rough topic into pl
 ## Core Features
 
 - Platform-native generation for Xiaohongshu, X/Twitter, LinkedIn, Instagram, TikTok, Zhihu, and Weibo.
-- Domestic platforms default toward Chinese output; global platforms default toward conversational English output.
+- X/Twitter, LinkedIn, Instagram, and TikTok support Chinese plus all current foreign-language outputs: English, Japanese, Korean, Malay, and French.
+- Platform selection controls format and rhythm; content language controls the final writing language and local expression.
 - Optional creator-style references for cadence and rhythm guidance.
 - Trend retrieval and local memory through Chroma.
 - Three writing agents with distinct roles:

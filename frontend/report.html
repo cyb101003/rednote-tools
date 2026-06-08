@@ -1050,16 +1050,166 @@
     translations.ms = { ...translations.en, back: "Kembali ke studio", copy: "Salin akhir", title: "Laporan jana", export: "Eksport laporan", generateAgain: "Jana semula", compareTitle: "Mengapa ia lebih baik daripada AI biasa", shareBadge: "Laporan agent" };
     translations.fr = { ...translations.en, back: "Retour au studio", copy: "Copier le final", title: "Rapport", export: "Exporter le rapport", generateAgain: "Generer encore", compareTitle: "Pourquoi c'est mieux qu'une IA generique", shareBadge: "Rapport agent" };
 
+    const reportI18nOverride = {
+      en: {
+        kicker: "Performance assessment", summaryDefault: "Final copy, judge notes, agent drafts, and scoring analysis.",
+        finalCopy: "Final copy", winner: "winner agent", risk: "AI-pattern risk", audit: "human-like audit",
+        why: "Why this works", merge: "Merge strategy", fit: "Platform-fit notes",
+        compareTitle: "Why this beats generic AI", genericTitle: "Generic AI output", realSkillTitle: "RealSkill output",
+        diff1: "More lived-in details", diff2: "Better platform rhythm", diff3: "Lower AI-pattern risk", diff4: "Clearer user value",
+        drafts: "Agent drafts", shareWinnerLabel: "Winner Agent", shareScoreLabel: "Human-like score", shareRiskLabel: "AI-pattern risk",
+        analysis: "Analysis charts", barHuman: "Human tone", barFit: "Platform fit", barSpread: "Spread potential",
+        chartNoteTitle: "How to read it", chartNote: "The chart emphasizes user-facing qualities: human tone, platform fit, spread potential, clarity, originality, and actionability.",
+        generatedTopic: "Generated topic", noResult: "No result returned.", noDraft: "No draft returned.", notScored: "not scored", wins: " wins",
+        agentA: "Viral curator", agentB: "Real-life sharer", agentC: "Rational author",
+        selectedFallback: "The judge selected the strongest balanced draft for this topic.",
+        mergeFallback: "Use the winner as the base and borrow useful traits from the other drafts.",
+        platformLine: "Platform", contentLanguageLine: "Content language", humanToneLine: "Human tone", platformFitLine: "platform fit", spreadLine: "spread potential", humanizeModeLine: "Humanize mode",
+        copied: "Copied final copy", exported: "Report exported",
+        genericLine1: "Here is a useful post about {topic}.", genericLine2: "You can try these tips and choose the option that works best for you.", genericLine3: "This is suitable for {platform} users who want a simple and practical recommendation."
+      },
+      zh: {
+        back: "返回工作台", copy: "复制最终文案", title: "生成报告", export: "导出报告卡", generateAgain: "再次生成",
+        kicker: "表现评估", summaryDefault: "最终文案、评审说明、Agent 草稿和评分分析。",
+        finalCopy: "最终文案", winner: "胜出 Agent", risk: "AI 痕迹风险", audit: "真人感审计",
+        why: "为什么有效", merge: "融合策略", fit: "平台适配说明",
+        compareTitle: "为什么比普通 AI 更好", genericTitle: "普通 AI 输出", realSkillTitle: "RealSkill 输出",
+        diff1: "更有真实生活细节", diff2: "更符合平台节奏", diff3: "更低 AI 痕迹风险", diff4: "用户价值更清晰",
+        drafts: "Agent 草稿", shareBadge: "Agent 报告", shareWinnerLabel: "胜出 Agent", shareScoreLabel: "真人感评分", shareRiskLabel: "AI 痕迹风险",
+        analysis: "分析图表", barHuman: "真人感", barFit: "平台适配", barSpread: "传播潜力",
+        chartNoteTitle: "怎么看图表", chartNote: "图表强调用户真正关心的质量：真人感、平台适配、传播潜力、清晰度、原创度和行动性。",
+        emptyTitle: "还没有报告", emptyText: "请先从工作台运行一次生成。Agent 面板完成后会自动打开这里。", openStudio: "打开工作台",
+        generatedTopic: "生成主题", noResult: "没有返回结果。", noDraft: "没有返回草稿。", notScored: "未评分", wins: " 胜出",
+        agentA: "爆款策展者", agentB: "真实分享者", agentC: "理性结构作者",
+        selectedFallback: "评审为这个主题选择了综合表现最强的草稿。",
+        mergeFallback: "以胜出版本为基础，并借用其他草稿的有效特质。",
+        platformLine: "平台", contentLanguageLine: "内容语言", humanToneLine: "真人感", platformFitLine: "平台适配", spreadLine: "传播潜力", humanizeModeLine: "润色模式",
+        copied: "已复制最终文案", exported: "报告已导出",
+        genericLine1: "这里是一篇关于「{topic}」的实用内容。", genericLine2: "你可以尝试这些建议，并选择最适合自己的方式。", genericLine3: "这适合想要简单实用建议的 {platform} 用户。"
+      },
+      zhHant: {
+        back: "返回工作台", copy: "複製最終文案", title: "生成報告", export: "匯出報告卡", generateAgain: "再次生成",
+        kicker: "表現評估", summaryDefault: "最終文案、評審說明、Agent 草稿和評分分析。",
+        finalCopy: "最終文案", winner: "勝出 Agent", risk: "AI 痕跡風險", audit: "真人感審計",
+        why: "為什麼有效", merge: "融合策略", fit: "平台適配說明",
+        compareTitle: "為什麼比普通 AI 更好", genericTitle: "普通 AI 輸出", realSkillTitle: "RealSkill 輸出",
+        diff1: "更有真實生活細節", diff2: "更符合平台節奏", diff3: "更低 AI 痕跡風險", diff4: "用戶價值更清楚",
+        drafts: "Agent 草稿", shareBadge: "Agent 報告", shareWinnerLabel: "勝出 Agent", shareScoreLabel: "真人感評分", shareRiskLabel: "AI 痕跡風險",
+        analysis: "分析圖表", barHuman: "真人感", barFit: "平台適配", barSpread: "傳播潛力",
+        chartNoteTitle: "怎麼看圖表", chartNote: "圖表強調用戶真正關心的品質：真人感、平台適配、傳播潛力、清晰度、原創度和行動性。",
+        emptyTitle: "還沒有報告", emptyText: "請先從工作台執行一次生成。Agent 面板完成後會自動開啟這裡。", openStudio: "開啟工作台",
+        generatedTopic: "生成主題", noResult: "沒有返回結果。", noDraft: "沒有返回草稿。", notScored: "未評分", wins: " 勝出",
+        agentA: "爆款策展者", agentB: "真實分享者", agentC: "理性結構作者",
+        selectedFallback: "評審為這個主題選擇了綜合表現最強的草稿。",
+        mergeFallback: "以勝出版本為基礎，並借用其他草稿的有效特質。",
+        platformLine: "平台", contentLanguageLine: "內容語言", humanToneLine: "真人感", platformFitLine: "平台適配", spreadLine: "傳播潛力", humanizeModeLine: "潤色模式",
+        copied: "已複製最終文案", exported: "報告已匯出",
+        genericLine1: "這是一篇關於「{topic}」的實用內容。", genericLine2: "你可以嘗試這些建議，並選擇最適合自己的方式。", genericLine3: "這適合想要簡單實用建議的 {platform} 用戶。"
+      },
+      ja: {
+        back: "Studio に戻る", copy: "最終コピーをコピー", title: "生成レポート", export: "レポートカードを書き出す", generateAgain: "もう一度生成",
+        kicker: "パフォーマンス評価", summaryDefault: "最終コピー、審査メモ、Agent 下書き、スコア分析。",
+        finalCopy: "最終コピー", winner: "勝者 Agent", risk: "AI っぽさリスク", audit: "人らしさ評価",
+        why: "効く理由", merge: "統合方針", fit: "プラットフォーム適合メモ",
+        compareTitle: "通常の AI 出力との違い", genericTitle: "一般的な AI 出力", realSkillTitle: "RealSkill 出力",
+        diff1: "生活感のある細部", diff2: "平台に合うリズム", diff3: "AI っぽさを低減", diff4: "ユーザー価値が明確",
+        drafts: "Agent 下書き", shareBadge: "Agent レポート", shareWinnerLabel: "勝者 Agent", shareScoreLabel: "人らしさスコア", shareRiskLabel: "AI っぽさリスク",
+        analysis: "分析チャート", barHuman: "人らしさ", barFit: "平台適合", barSpread: "拡散可能性",
+        chartNoteTitle: "見方", chartNote: "チャートは、人らしさ、平台適合、拡散可能性、明確さ、独自性、行動しやすさを重視します。",
+        emptyTitle: "まだレポートがありません", emptyText: "先にスタジオで生成を実行してください。Agent パネル完了後、ここが自動で開きます。", openStudio: "スタジオを開く",
+        generatedTopic: "生成テーマ", noResult: "結果が返っていません。", noDraft: "下書きが返っていません。", notScored: "未採点", wins: " が勝利",
+        agentA: "バイラル編集者", agentB: "実体験シェア", agentC: "構造化ライター",
+        selectedFallback: "審査はこのテーマで最もバランスの良い下書きを選びました。",
+        mergeFallback: "勝者をベースに、他の下書きの有効な要素を取り入れます。",
+        platformLine: "プラットフォーム", contentLanguageLine: "コンテンツ言語", humanToneLine: "人らしさ", platformFitLine: "平台適合", spreadLine: "拡散可能性", humanizeModeLine: "Humanize モード",
+        copied: "最終コピーをコピーしました", exported: "レポートを書き出しました",
+        genericLine1: "{topic} についての便利な投稿です。", genericLine2: "これらのヒントを試して、自分に合う方法を選べます。", genericLine3: "シンプルで実用的な提案を求める {platform} ユーザーに向いています。"
+      },
+      ko: {
+        back: "스튜디오로 돌아가기", copy: "최종 문안 복사", title: "생성 리포트", export: "리포트 카드 내보내기", generateAgain: "다시 생성",
+        kicker: "성과 평가", summaryDefault: "최종 문안, 심사 메모, Agent 초안, 점수 분석.",
+        finalCopy: "최종 문안", winner: "우승 Agent", risk: "AI 패턴 위험", audit: "사람 같은 톤 평가",
+        why: "왜 효과적인가", merge: "병합 전략", fit: "플랫폼 적합 메모",
+        compareTitle: "일반 AI 출력보다 나은 이유", genericTitle: "일반 AI 출력", realSkillTitle: "RealSkill 출력",
+        diff1: "더 살아 있는 디테일", diff2: "더 좋은 플랫폼 리듬", diff3: "낮은 AI 패턴 위험", diff4: "더 명확한 사용자 가치",
+        drafts: "Agent 초안", shareBadge: "Agent 리포트", shareWinnerLabel: "우승 Agent", shareScoreLabel: "사람 같은 점수", shareRiskLabel: "AI 패턴 위험",
+        analysis: "분석 차트", barHuman: "사람 같은 톤", barFit: "플랫폼 적합도", barSpread: "확산 가능성",
+        chartNoteTitle: "차트 읽는 법", chartNote: "차트는 사용자가 실제로 느끼는 품질인 사람 같은 톤, 플랫폼 적합도, 확산 가능성, 명확성, 독창성, 실행 가능성을 강조합니다.",
+        emptyTitle: "아직 리포트가 없습니다", emptyText: "먼저 스튜디오에서 생성을 실행하세요. Agent 패널이 끝나면 이 페이지가 자동으로 열립니다.", openStudio: "스튜디오 열기",
+        generatedTopic: "생성된 주제", noResult: "결과가 반환되지 않았습니다.", noDraft: "초안이 반환되지 않았습니다.", notScored: "점수 없음", wins: " 우승",
+        agentA: "바이럴 큐레이터", agentB: "실제 공유자", agentC: "구조형 작성자",
+        selectedFallback: "심사자는 이 주제에서 가장 균형 잡힌 초안을 선택했습니다.",
+        mergeFallback: "우승 초안을 기준으로 삼고 다른 초안의 장점을 일부 반영합니다.",
+        platformLine: "플랫폼", contentLanguageLine: "콘텐츠 언어", humanToneLine: "사람 같은 톤", platformFitLine: "플랫폼 적합도", spreadLine: "확산 가능성", humanizeModeLine: "Humanize 모드",
+        copied: "최종 문안을 복사했습니다", exported: "리포트를 내보냈습니다",
+        genericLine1: "{topic}에 대한 유용한 게시물입니다.", genericLine2: "이 팁들을 시도해 보고 자신에게 맞는 방식을 고르면 됩니다.", genericLine3: "간단하고 실용적인 추천을 원하는 {platform} 사용자에게 적합합니다."
+      },
+      ms: {
+        back: "Kembali ke studio", copy: "Salin akhir", title: "Laporan jana", export: "Eksport kad laporan", generateAgain: "Jana semula",
+        kicker: "Penilaian prestasi", summaryDefault: "Copy akhir, nota penilai, draf agent, dan analisis skor.",
+        finalCopy: "Copy akhir", winner: "Agent menang", risk: "Risiko corak AI", audit: "Audit rasa manusia",
+        why: "Mengapa ia berkesan", merge: "Strategi gabungan", fit: "Nota kesesuaian platform",
+        compareTitle: "Mengapa ia lebih baik daripada AI biasa", genericTitle: "Output AI biasa", realSkillTitle: "Output RealSkill",
+        diff1: "Butiran lebih hidup", diff2: "Rentak platform lebih tepat", diff3: "Risiko corak AI lebih rendah", diff4: "Nilai pengguna lebih jelas",
+        drafts: "Draf agent", shareBadge: "Laporan agent", shareWinnerLabel: "Agent menang", shareScoreLabel: "Skor rasa manusia", shareRiskLabel: "Risiko corak AI",
+        analysis: "Carta analisis", barHuman: "Nada manusia", barFit: "Kesesuaian platform", barSpread: "Potensi sebar",
+        chartNoteTitle: "Cara baca", chartNote: "Carta menekankan kualiti yang dirasai pengguna: nada manusia, kesesuaian platform, potensi sebar, kejelasan, keaslian, dan kebolehgunaan.",
+        emptyTitle: "Belum ada laporan", emptyText: "Jalankan generasi dari studio dahulu. Laporan akan dibuka selepas panel agent selesai.", openStudio: "Buka studio",
+        generatedTopic: "Topik dijana", noResult: "Tiada hasil dikembalikan.", noDraft: "Tiada draf dikembalikan.", notScored: "tiada skor", wins: " menang",
+        agentA: "Kurator viral", agentB: "Perkongsian sebenar", agentC: "Penulis berstruktur",
+        selectedFallback: "Penilai memilih draf paling seimbang untuk topik ini.",
+        mergeFallback: "Gunakan pemenang sebagai asas dan ambil kekuatan daripada draf lain.",
+        platformLine: "Platform", contentLanguageLine: "Bahasa kandungan", humanToneLine: "Nada manusia", platformFitLine: "kesesuaian platform", spreadLine: "potensi sebar", humanizeModeLine: "Mod humanize",
+        copied: "Copy akhir disalin", exported: "Laporan dieksport",
+        genericLine1: "Ini post berguna tentang {topic}.", genericLine2: "Anda boleh cuba tip ini dan pilih cara yang paling sesuai.", genericLine3: "Sesuai untuk pengguna {platform} yang mahukan cadangan ringkas dan praktikal."
+      },
+      fr: {
+        back: "Retour au studio", copy: "Copier le final", title: "Rapport de generation", export: "Exporter la carte", generateAgain: "Generer encore",
+        kicker: "Evaluation de performance", summaryDefault: "Copy final, notes du juge, brouillons Agent et analyse des scores.",
+        finalCopy: "Copy final", winner: "Agent gagnant", risk: "Risque de motif IA", audit: "Audit ton humain",
+        why: "Pourquoi ca marche", merge: "Strategie de fusion", fit: "Notes d'adaptation plateforme",
+        compareTitle: "Pourquoi c'est mieux qu'une IA generique", genericTitle: "Sortie IA generique", realSkillTitle: "Sortie RealSkill",
+        diff1: "Details plus vecus", diff2: "Meilleur rythme plateforme", diff3: "Risque IA plus faible", diff4: "Valeur utilisateur plus claire",
+        drafts: "Brouillons Agent", shareBadge: "Rapport Agent", shareWinnerLabel: "Agent gagnant", shareScoreLabel: "Score humain", shareRiskLabel: "Risque de motif IA",
+        analysis: "Graphiques d'analyse", barHuman: "Ton humain", barFit: "Adaptation plateforme", barSpread: "Potentiel de diffusion",
+        chartNoteTitle: "Comment lire", chartNote: "Le graphique met l'accent sur les qualites percues par l'utilisateur : ton humain, adaptation plateforme, potentiel de diffusion, clarte, originalite et actionnabilite.",
+        emptyTitle: "Aucun rapport", emptyText: "Lancez d'abord une generation depuis le studio. Le rapport s'ouvrira apres la fin du panel Agent.", openStudio: "Ouvrir le studio",
+        generatedTopic: "Sujet genere", noResult: "Aucun resultat retourne.", noDraft: "Aucun brouillon retourne.", notScored: "non note", wins: " gagne",
+        agentA: "Curateur viral", agentB: "Partage vecu", agentC: "Auteur structure",
+        selectedFallback: "Le juge a choisi le brouillon le plus equilibre pour ce sujet.",
+        mergeFallback: "Utiliser le gagnant comme base et reprendre les forces des autres brouillons.",
+        platformLine: "Plateforme", contentLanguageLine: "Langue du contenu", humanToneLine: "Ton humain", platformFitLine: "adaptation plateforme", spreadLine: "potentiel de diffusion", humanizeModeLine: "Mode humanize",
+        copied: "Copy final copie", exported: "Rapport exporte",
+        genericLine1: "Voici un post utile sur {topic}.", genericLine2: "Vous pouvez essayer ces conseils et choisir ce qui marche le mieux pour vous.", genericLine3: "C'est adapte aux utilisateurs {platform} qui veulent une recommandation simple et pratique."
+      }
+    };
+
+    Object.keys(reportI18nOverride).forEach((lang) => {
+      translations[lang] = { ...(translations[lang] || translations.en), ...reportI18nOverride[lang] };
+    });
+
     const langSelect = document.getElementById("langSelect");
     const currentLang = translations[localStorage.getItem("realskill_lang")] ? localStorage.getItem("realskill_lang") : "en";
+    let activeLang = currentLang;
+    function rt(key) {
+      return translations[activeLang]?.[key] || translations.en[key] || key;
+    }
+    function formatMsg(key, values = {}) {
+      return rt(key).replace(/\{(\w+)\}/g, (_, name) => values[name] ?? "");
+    }
     function applyLang(lang) {
       const dict = translations[lang] || {};
-      document.documentElement.lang = lang;
+      activeLang = translations[lang] ? lang : "en";
+      document.documentElement.lang = activeLang;
       document.querySelectorAll("[data-i18n]").forEach((node) => {
         const key = node.dataset.i18n;
         node.textContent = dict[key] || baseText[key] || "";
       });
-      localStorage.setItem("realskill_lang", lang);
+      const kicker = document.querySelector(".report-kicker");
+      if (kicker) kicker.textContent = rt("kicker");
+      localStorage.setItem("realskill_lang", activeLang);
+      const currentReport = window.__realskillReport;
+      if (currentReport) renderReport(currentReport);
     }
     langSelect.value = currentLang;
     langSelect.addEventListener("change", () => applyLang(langSelect.value));
@@ -1069,6 +1219,7 @@
     const emptyState = document.getElementById("emptyState");
     const toast = document.getElementById("toast");
     const report = loadReport();
+    window.__realskillReport = report;
 
     function loadReport() {
       const raw = sessionStorage.getItem("realskill_report") || localStorage.getItem("realskill_last_report");
@@ -1108,12 +1259,12 @@
     }
 
     function genericAiOutput(data) {
-      const topic = data.request?.topic || "this topic";
+      const topic = data.request?.topic || rt("generatedTopic");
       const platform = data.platform || data.request?.platform || "social media";
       return [
-        `Here is a useful post about ${topic}.`,
-        `You can try these tips and choose the option that works best for you.`,
-        `This is suitable for ${platform} users who want a simple and practical recommendation.`
+        formatMsg("genericLine1", { topic, platform }),
+        formatMsg("genericLine2", { topic, platform }),
+        formatMsg("genericLine3", { topic, platform })
       ].join("\n");
     }
 
@@ -1123,7 +1274,7 @@
     }
 
     function renderShareCard(data) {
-      const topic = data.request?.topic || "Generated topic";
+      const topic = data.request?.topic || rt("generatedTopic");
       document.getElementById("shareTopic").textContent = topic;
       document.getElementById("shareWinner").textContent = data.winner_agent ? `Agent ${data.winner_agent}` : "-";
       document.getElementById("shareScore").textContent = data.ai_score ? `${data.ai_score}/10` : "-";
@@ -1179,24 +1330,24 @@
     }
 
     function renderAgents(data) {
-      const labels = { A: "Viral curator", B: "Real-life sharer", C: "Rational author" };
+      const labels = { A: rt("agentA"), B: rt("agentB"), C: rt("agentC") };
       const variants = data.all_variants || {};
       const scores = data.scores || {};
       const strengths = data.strengths || {};
       const winner = data.winner_agent || "B";
       document.getElementById("agentGrid").innerHTML = ["A", "B", "C"].map((key) => {
         const isWinner = key === winner;
-        const score = Array.isArray(scores[key]) ? scores[key].join(" / ") : "not scored";
+        const score = Array.isArray(scores[key]) ? scores[key].join(" / ") : rt("notScored");
         return `<article class="agent ${isWinner ? "winner" : ""}">
-          <div class="agent-head"><span>Agent ${key}${isWinner ? " wins" : ""}</span><span>${labels[key]} | ${score}</span></div>
+          <div class="agent-head"><span>Agent ${key}${isWinner ? rt("wins") : ""}</span><span>${labels[key]} | ${score}</span></div>
           <p class="strength">${escapeHtml(strengths[key] || labels[key])}</p>
-          <p class="agent-copy">${escapeHtml(cleanPublishText(variants[key]) || "No draft returned.")}</p>
+          <p class="agent-copy">${escapeHtml(cleanPublishText(variants[key]) || rt("noDraft"))}</p>
         </article>`;
       }).join("");
     }
 
     function platformNote(data, values) {
-      return `Platform: ${data.platform || "-"} | Human tone ${values[0].toFixed(1)}, platform fit ${values[1].toFixed(1)}, spread potential ${values[2].toFixed(1)}. Humanize mode: ${data.humanize_mode || "rules"}.`;
+      return `${rt("platformLine")}: ${data.platform || "-"} | ${rt("contentLanguageLine")}: ${data.content_language || data.request?.content_language || "en"} | ${rt("humanToneLine")} ${values[0].toFixed(1)}, ${rt("platformFitLine")} ${values[1].toFixed(1)}, ${rt("spreadLine")} ${values[2].toFixed(1)}. ${rt("humanizeModeLine")}: ${data.humanize_mode || "rules"}.`;
     }
 
     function buildReportCard(data) {
@@ -1205,6 +1356,7 @@
         "",
         `Topic: ${data.request?.topic || "-"}`,
         `Platform: ${data.platform || data.request?.platform || "-"}`,
+        `Content language: ${data.content_language || data.request?.content_language || "-"}`,
         `Winner: Agent ${data.winner_agent || "-"}`,
         `AI-pattern risk: ${data.ai_detection_risk || "-"}`,
         `Human-like audit: ${data.ai_score || "-"}/10`,
@@ -1223,38 +1375,42 @@
       ].join("\n");
     }
 
-    if (!report) {
-      emptyState.hidden = false;
-    } else {
-      reportRoot.hidden = false;
-      const values = winnerScoreArray(report);
-      document.getElementById("summary").textContent = `${report.request?.topic || "Generated topic"} | ${report.platform || report.request?.platform || "-"}`;
-      report.result = cleanPublishText(report.result);
-      if (report.all_variants) {
-        Object.keys(report.all_variants).forEach((key) => {
-          report.all_variants[key] = cleanPublishText(report.all_variants[key]);
+    function renderReport(data) {
+      const values = winnerScoreArray(data);
+      document.getElementById("summary").textContent = `${data.request?.topic || rt("generatedTopic")} | ${data.platform || data.request?.platform || "-"} | ${data.content_language || data.request?.content_language || "en"}`;
+      data.result = cleanPublishText(data.result);
+      if (data.all_variants) {
+        Object.keys(data.all_variants).forEach((key) => {
+          data.all_variants[key] = cleanPublishText(data.all_variants[key]);
         });
       }
-      document.getElementById("finalOutput").textContent = report.result || "No result returned.";
-      document.getElementById("winnerMetric").textContent = report.winner_agent || "-";
-      document.getElementById("riskMetric").textContent = report.ai_detection_risk || "-";
-      document.getElementById("scoreMetric").textContent = report.ai_score ? `${report.ai_score}/10` : "-";
-      document.getElementById("judgeReason").textContent = report.judge_reason || "The judge selected the strongest balanced draft for this topic.";
-      document.getElementById("mergeStrategy").textContent = report.merge_strategy || "Use the winner as the base and borrow useful traits from the other drafts.";
-      document.getElementById("platformNotes").textContent = platformNote(report, values);
+      document.getElementById("finalOutput").textContent = data.result || rt("noResult");
+      document.getElementById("winnerMetric").textContent = data.winner_agent || "-";
+      document.getElementById("riskMetric").textContent = data.ai_detection_risk || "-";
+      document.getElementById("scoreMetric").textContent = data.ai_score ? `${data.ai_score}/10` : "-";
+      document.getElementById("judgeReason").textContent = data.judge_reason || rt("selectedFallback");
+      document.getElementById("mergeStrategy").textContent = data.merge_strategy || rt("mergeFallback");
+      document.getElementById("platformNotes").textContent = platformNote(data, values);
       setBar("humanBar", "humanScore", values[0]);
       setBar("fitBar", "fitScore", values[1]);
       setBar("spreadBar", "spreadScore", values[2]);
       drawRadar(values);
-      renderComparison(report);
-      renderShareCard(report);
-      renderAgents(report);
+      renderComparison(data);
+      renderShareCard(data);
+      renderAgents(data);
+    }
+
+    if (!report) {
+      emptyState.hidden = false;
+    } else {
+      reportRoot.hidden = false;
+      renderReport(report);
     }
 
     document.getElementById("copyBtn").addEventListener("click", async () => {
       if (!report) return;
       await navigator.clipboard.writeText(cleanPublishText(report.result));
-      showToast("Copied final copy");
+      showToast(rt("copied"));
     });
     document.getElementById("exportBtn").addEventListener("click", () => {
       if (!report) return;
@@ -1267,7 +1423,7 @@
       link.click();
       link.remove();
       URL.revokeObjectURL(url);
-      showToast("Report exported");
+      showToast(rt("exported"));
     });
   </script>
 </body>
